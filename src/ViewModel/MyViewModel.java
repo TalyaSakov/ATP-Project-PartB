@@ -4,6 +4,8 @@ import Model.IModel;
 import algorithms.mazeGenerators.Maze;
 import javafx.scene.input.KeyEvent;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -102,9 +104,10 @@ public class MyViewModel extends Observable implements Observer {
         model.getSolution();
     }
 
-    public void loadGame(String absolutePath) {
+    public void saveGame(File saveFile) throws IOException {
+        model.saveMaze(saveFile);
     }
-
-    public void saveMaze(String absolutePath) {
+    public void loadGame(File file) throws IOException, ClassNotFoundException {
+        model.loadMaze(file);
     }
 }

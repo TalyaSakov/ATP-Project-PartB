@@ -179,35 +179,34 @@ public class MyViewController implements Initializable, Observer {
 
         popAlert("About the game", strAbout);
     }
-
-    public  void  saveGame(){
-
-        //Receiving the path and than creating actual file there
+    public void saveGame() throws IOException {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text doc(*.maze)", "*.maze"));
-        File file = fileChooser.showSaveDialog(primaryStage);
-        if (file == null)
-            return;
-        this.myViewModel.saveMaze(file.getAbsolutePath());
-    }
-    public  void  loadGame()
-    {
-        //Receiving the path and than creating actual file there
-        FileChooser fileChooser = new FileChooser();
-        //Defining the .maze to be the end of the file
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text doc(*.maze)", "*.maze"));
-        File file = fileChooser.showOpenDialog(primaryStage);
-
-        if (file == null)
-            return;
-
-        if (file.getAbsolutePath().length() <= 5 || !file.getAbsolutePath().substring(file.getAbsolutePath().length() - 4).equals("maze")) {
-            Alert unvalidFile = new Alert(Alert.AlertType.ERROR);
-            unvalidFile.setContentText("Unvalid file");
-            unvalidFile.showAndWait();
-            return;
+        /*
+        System.getProperty("user.home") :
+        on Windows:  home directory of the current logged in user. c:\Users\${current_user_name}
+        * on Linux: "/home/user/"  */
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Maze Files", "*.maze")
+        );
+        fileChooser.setInitialFileName("My Maze To Save");
+        File saveFile = fileChooser.showSaveDialog(primaryStage);
+        if (saveFile != null) {
+            myViewModel.saveGame(saveFile);
         }
-        this.myViewModel.loadGame(file.getAbsolutePath());
+    }
+
+    /**File->Load Menu Item Handler */
+    public void loadGame() throws IOException, ClassNotFoundException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Maze Files", "*.maze"));
+        File loadFile = fileChooser.showOpenDialog(primaryStage);
+        if (loadFile != null) {
+            myViewModel.loadGame(loadFile);
+           // mazeDisplayer.audioChooser(1);
+        } else {
+        }
     }
     public void popAlert (String title, String message ){
 
