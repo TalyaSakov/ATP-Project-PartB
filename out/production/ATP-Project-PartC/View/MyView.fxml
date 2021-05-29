@@ -64,19 +64,28 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Close" />
+                                <MenuItem mnemonicParsing="false" onAction="#newGame" text="New" />
+                                <MenuItem mnemonicParsing="false" onAction="#saveGame" text="Save" />
+                                <MenuItem mnemonicParsing="false" onAction="#loadGame" text="Load" />
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Edit">
+                        <Menu mnemonicParsing="false" text="Options">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Delete" />
+                                <MenuItem mnemonicParsing="false" onAction="#propertiesGame" text="Properties" />
                             </items>
                         </Menu>
+                        <Menu mnemonicParsing="false"  onAction="#exitGame" text="Exit">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#exitGame" text="Exit" />
+                            </items></Menu>
                         <Menu mnemonicParsing="false" text="Help">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="About" />
-                            </items>
-                        </Menu>
+                                <MenuItem mnemonicParsing="false" onAction="#helpGame" text="help" />
+                            </items></Menu>
+                        <Menu mnemonicParsing="false" text="About">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#aboutGame" text="about" />
+                            </items></Menu>
                     </menus>
                 </MenuBar>
             </children>

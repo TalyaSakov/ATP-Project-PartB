@@ -115,5 +115,10 @@ public class MyViewModel extends Observable implements Observer {
         return model.getSolution();
     }
 
+    public void loadGame(String absolutePath) {
+    }
+
+    public void saveMaze(String absolutePath) {
+    }
 
 }

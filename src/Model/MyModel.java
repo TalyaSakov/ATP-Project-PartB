@@ -10,7 +10,8 @@ import algorithms.search.Solution;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MyModel extends Observable implements IModel {
+public class
+MyModel extends Observable implements IModel {
     private Maze maze;
     private SearchableMaze searchableMaze;
     private Solution solution;
