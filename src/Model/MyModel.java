@@ -47,6 +47,35 @@ MyModel extends Observable implements IModel {
                 if ((colChar != maze.getMaze()[0].length -1)&& (maze.getMaze()[rowChar][colChar+1] != 1))
                     colChar ++;
                 break;
+
+            case 5: //UP-Right
+                if ((rowChar !=0) && (maze.getMaze()[rowChar-1][colChar] != 1) && (colChar != maze.getMaze()[0].length -1) && (maze.getMaze()[rowChar][colChar+1] != 1)){
+                    rowChar --;
+                    colChar ++;
+                break;
+                }
+            case 6: //UP-LEFT
+                if ((rowChar !=0) && (maze.getMaze()[rowChar-1][colChar] != 1) && (colChar !=0) && (maze.getMaze()[rowChar][colChar -1] != 1)){
+                    rowChar --;
+                    colChar --;
+                break;
+                }
+
+            case 7: //DOWN-RIGHT
+                if ((rowChar != maze.getMaze().length -1) && (maze.getMaze()[rowChar+1][colChar] != 1) && (colChar != maze.getMaze()[0].length -1)&& (maze.getMaze()[rowChar][colChar+1] != 1)){
+                    rowChar ++;
+                    colChar ++;
+                break;
+                }
+
+            case 8://Down-left
+                if ((rowChar != maze.getMaze().length -1) && (maze.getMaze()[rowChar+1][colChar] != 1) && (colChar !=0) && (maze.getMaze()[rowChar][colChar -1] != 1)){
+                    rowChar ++;
+                    colChar --;
+                    break;
+
+                }
+
         }
         setChanged();
         notifyObservers();

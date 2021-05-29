@@ -37,7 +37,6 @@ public class MyViewController implements Initializable, Observer {
     private MyViewModel myViewModel;
     private Maze maze;
 
-
     @FXML
     public Label lbl_player_row;
     @FXML

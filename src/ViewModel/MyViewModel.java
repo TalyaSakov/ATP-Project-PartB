@@ -14,8 +14,6 @@ public class MyViewModel extends Observable implements Observer {
     private Maze maze;
     private Solution solution;
 
-
-
     private int rowChar;
     private int colChar;
     private int rowGoal;
@@ -62,21 +60,17 @@ public class MyViewModel extends Observable implements Observer {
     }
 
     public void moveCharacter(KeyEvent keyEvent) {
-        int direction = -1;
-        switch (keyEvent.getCode()) {
-            case UP:
-                direction = 1;
-                break;
-            case DOWN:
-                direction = 2;
-                break;
-            case LEFT:
-                direction = 3;
-                break;
-            case RIGHT:
-                direction = 4;
-                break;
-        }
+        int direction = switch (keyEvent.getCode()) {
+            case DIGIT8 -> 1; //UP
+            case DIGIT2 -> 2; //Down
+            case DIGIT4 -> 3; //Left
+            case DIGIT6 -> 4; //Right
+            case DIGIT9  -> 5; //UP-RIGHT
+            case DIGIT7 -> 6; //UP-LEFT
+            case DIGIT3-> 7; //DOWN-RIGHT
+            case DIGIT1 -> 8; //DOWN-LEFT
+            default -> -1;
+        };
         model.updateCharacterLocation(direction);
     }
 
