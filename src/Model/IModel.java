@@ -14,7 +14,7 @@ public interface IModel {
     public int getColChar();
     public int getRowGoal();
     public int getColGoal();
-    public void solveMaze(Maze maze);
+    public void solveMaze(Maze maze,int row_player,int col_player);
     public Solution getSolution();
 
 }

@@ -2,6 +2,7 @@ package Model;
 
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
+import algorithms.mazeGenerators.Position;
 import algorithms.search.BreadthFirstSearch;
 import algorithms.search.SearchableMaze;
 import algorithms.search.Solution;
@@ -58,7 +59,10 @@ public class MyModel extends Observable implements IModel {
     public void generateMaze(int rows, int cols){
         Maze maze = new MyMazeGenerator().generate(rows,cols);
         this.maze = maze;
-        SearchableMaze searchableMaze = new SearchableMaze(maze);
+        Position startPosition = maze.getStartPosition();
+        rowChar = startPosition.getRowIndex();
+        colChar = startPosition.getColumnIndex();
+        this.searchableMaze = new SearchableMaze(maze);
         setChanged();
         notifyObservers();
     }
@@ -83,9 +87,11 @@ public class MyModel extends Observable implements IModel {
         return colGoal;
     }
 
+
     @Override
-    public void solveMaze(Maze maze) {
+    public void solveMaze(Maze maze,int row_player, int col_player) {
         BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch();
+        maze.setStartPosition(row_player,col_player);
         solution = breadthFirstSearch.solve(searchableMaze);
         setChanged();
         notifyObservers();
@@ -95,5 +101,7 @@ public class MyModel extends Observable implements IModel {
     public Solution getSolution() {
         return solution;
     }
+
+
 
 }

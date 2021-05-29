@@ -2,6 +2,7 @@ package ViewModel;
 
 import Model.IModel;
 import algorithms.mazeGenerators.Maze;
+import algorithms.search.Solution;
 import javafx.scene.input.KeyEvent;
 
 import java.util.Observable;
@@ -11,6 +12,9 @@ public class MyViewModel extends Observable implements Observer {
 
     private IModel model;
     private Maze maze;
+    private Solution solution;
+
+
 
     private int rowChar;
     private int colChar;
@@ -44,6 +48,8 @@ public class MyViewModel extends Observable implements Observer {
                 }
                 else{
                     this.maze = maze;
+                    rowChar = model.getRowChar();
+                    colChar = model.getColChar();
                 }
             }
             setChanged();
@@ -82,6 +88,13 @@ public class MyViewModel extends Observable implements Observer {
         return colChar;
     }
 
+    public void setRowChar(int rowChar) {
+        this.rowChar = rowChar;
+    }
+
+    public void setColChar(int colChar) {
+        this.colChar = colChar;
+    }
     public int getRowGoal() {
         return rowGoal;
     }
@@ -94,11 +107,13 @@ public class MyViewModel extends Observable implements Observer {
         return maze;
     }
 
-    public void solveMaze(Maze maze){
-        model.solveMaze(maze);
+    public void solveMaze(Maze maze,int row_player,int col_player){
+        model.solveMaze(maze,row_player,col_player);
     }
 
-    public void getSolution(){
-        model.getSolution();
+    public Solution getSolution(){
+        return model.getSolution();
     }
+
+
 }
