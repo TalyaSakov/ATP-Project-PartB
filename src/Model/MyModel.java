@@ -8,6 +8,7 @@ import algorithms.search.MazeState;
 import algorithms.search.SearchableMaze;
 import algorithms.search.Solution;
 
+import java.io.*;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -130,8 +131,111 @@ MyModel extends Observable implements IModel {
 
     @Override
     public Solution getSolution() {
-        return solution;
+        return solution;}
+
+    public void solveMaze(Maze maze) {
+        BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch();
+        solution = breadthFirstSearch.solve(searchableMaze);
+        setChanged();
+        notifyObservers();
     }
+
+
+
+    public void saveMaze(File saveFile){
+        File endFile = new File(saveFile.getPath());
+        try {
+            /*game state params --> save to file*/
+            endFile.createNewFile();
+            StringBuilder  builder = new StringBuilder();
+            builder.append(rowChar+"\n");
+            builder.append(colChar+"\n");
+            builder.append(rowGoal+"\n");
+            builder.append(colGoal+"\n");
+            builder.append(maze.getMaze().length+"\n");
+            builder.append(maze.getMaze()[0].length+"\n");
+
+            for(int i = 0; i < maze.getMaze().length; i++)
+            {
+                for(int j = 0; j < maze.getMaze()[0].length; j++)
+                {
+                    builder.append(maze.getMaze()[i][j]+"");
+                    if(j < maze.getMaze()[0].length - 1)
+                        builder.append(",");
+                }
+                builder.append("\n");
+            }
+            BufferedWriter writer = new BufferedWriter(new FileWriter(saveFile.getPath()));
+            writer.write(builder.toString());
+            writer.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void loadMaze(File file){
+        int goalRowIdx = 0, goalColIdx = 0 , playerRowIdx = 0, playerColIdx= 0, mazeNumOfRows = 0, mazeNumOfCols = 0;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            /*read 6 lines from file -- the saved parameters of a maze game */
+            for( int i = 0 ; i < 6 ; i++){
+                String line = br.readLine();
+                if (line != null) {
+                    if(i == 0)
+                        playerRowIdx = Integer.parseInt(line);
+                    if(i == 1)
+                        playerColIdx = Integer.parseInt(line);
+                    if(i == 2)
+                        goalRowIdx = Integer.parseInt(line);
+                    if(i == 3)
+                        goalColIdx = Integer.parseInt(line);
+                    if(i == 4)
+                        mazeNumOfRows = Integer.parseInt(line);
+                    if(i == 5)
+                        mazeNumOfCols = Integer.parseInt(line);
+                }
+            }
+            int[][] grid = new int[mazeNumOfRows][mazeNumOfCols];
+            String line = "";
+            int row = 0;
+            while ((line = br.readLine()) != null) {
+                String[] cols = line.split(",");
+                int col = 0;
+                for (String c : cols) {
+                    grid[row][col] = Integer.parseInt(c);
+                    col++;
+                }
+                row++;
+            }
+            br.close();
+            Position start = new Position(playerRowIdx, playerColIdx);
+            Position end  = new Position(goalRowIdx, goalColIdx);
+
+
+            this.maze = new Maze(mazeNumOfRows,mazeNumOfCols);
+            for(int i = 0; i < mazeNumOfRows; i++) {
+                for (int j = 0; j < mazeNumOfCols; j++) {
+                    this.maze.getMaze()[i][j] = grid[i][j];
+                }
+            }
+            this.maze.setStartPosition(start.getRowIndex(),start.getColumnIndex());
+            this.maze.setEndPosition(end.getRowIndex() , end.getColumnIndex());
+
+            this.rowChar = playerColIdx;
+            this.colChar = playerRowIdx;
+            this.rowGoal = rowChar;
+            this.colGoal = colChar;
+            //isMazeExist = true;
+            setChanged();
+            notifyObservers("loaded");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     public boolean Diagonal_Verification(int direction) {
         return switch (direction) {
