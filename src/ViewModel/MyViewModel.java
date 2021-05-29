@@ -61,14 +61,14 @@ public class MyViewModel extends Observable implements Observer {
 
     public void moveCharacter(KeyEvent keyEvent) {
         int direction = switch (keyEvent.getCode()) {
-            case DIGIT8 -> 1; //UP
-            case DIGIT2 -> 2; //Down
-            case DIGIT4 -> 3; //Left
-            case DIGIT6 -> 4; //Right
-            case DIGIT9  -> 5; //UP-RIGHT
-            case DIGIT7 -> 6; //UP-LEFT
-            case DIGIT3-> 7; //DOWN-RIGHT
-            case DIGIT1 -> 8; //DOWN-LEFT
+            case NUMPAD8 -> 1; //UP
+            case NUMPAD2 -> 2; //Down
+            case NUMPAD4 -> 3; //Left
+            case NUMPAD6 -> 4; //Right
+            case NUMPAD9  -> 5; //UP-RIGHT
+            case NUMPAD7 -> 6; //UP-LEFT
+            case NUMPAD3-> 7; //DOWN-RIGHT
+            case NUMPAD1 -> 8; //DOWN-LEFT
             default -> -1;
         };
         model.updateCharacterLocation(direction);
