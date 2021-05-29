@@ -3,6 +3,7 @@ package View;
 import Server.Configurations;
 import ViewModel.MyViewModel;
 import algorithms.mazeGenerators.Maze;
+import algorithms.mazeGenerators.Position;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
@@ -35,7 +36,6 @@ public class MyViewController implements Initializable, Observer {
 
     private MyViewModel myViewModel;
     private Maze maze;
-
 
     @FXML
     public Label lbl_player_row;
@@ -78,16 +78,16 @@ public class MyViewController implements Initializable, Observer {
     public void generateMaze(ActionEvent actionEvent) throws FileNotFoundException {
         if(generator == null)
             generator = new MazeGenerator();
-
         int rows = Integer.valueOf(textField_mazeRows.getText());
         int cols = Integer.valueOf(textField_mazeColumns.getText());
         myViewModel.generateMaze(rows,cols);
-//        Maze maze = generator.generateMaze(rows,cols);
+        mazeDisplayer.setFirstRun(true);
         mazeDisplayer.drawMaze(myViewModel.getMaze());
     }
 
     public void solveMaze() {
-        myViewModel.solveMaze(maze);
+        myViewModel.solveMaze(maze,mazeDisplayer.getRow_player(),mazeDisplayer.getColumn_player());
+        mazeDisplayer.drawSolution(myViewModel.getSolution());
     }
 
     public void mouseClicked(MouseEvent mouseEvent) {
@@ -238,7 +238,10 @@ public class MyViewController implements Initializable, Observer {
             if(maze == null)//generateMaze
             {
                 this.maze = myViewModel.getMaze();
+                Position startPosition = maze.getStartPosition();
                 try {
+                    set_update_player_position_row(startPosition.getRowIndex() + "");
+                    set_update_player_position_col(startPosition.getColumnIndex() + "");
                     mazeDisplayer.drawMaze(maze);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -246,7 +249,6 @@ public class MyViewController implements Initializable, Observer {
             }
             else {
                 Maze maze = myViewModel.getMaze();
-
                 if (maze == this.maze)//Not generateMaze
                 {
                     int rowChar = mazeDisplayer.getRow_player();
@@ -273,6 +275,9 @@ public class MyViewController implements Initializable, Observer {
                 {
                     this.maze = maze;
                     try {
+                        Position startPosition = maze.getStartPosition();
+                        set_update_player_position_row(startPosition.getRowIndex() + "");
+                        set_update_player_position_col(startPosition.getColumnIndex() + "");
                         mazeDisplayer.drawMaze(maze);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();

@@ -2,6 +2,7 @@ package ViewModel;
 
 import Model.IModel;
 import algorithms.mazeGenerators.Maze;
+import algorithms.search.Solution;
 import javafx.scene.input.KeyEvent;
 
 import java.io.File;
@@ -13,6 +14,7 @@ public class MyViewModel extends Observable implements Observer {
 
     private IModel model;
     private Maze maze;
+    private Solution solution;
 
     private int rowChar;
     private int colChar;
@@ -46,6 +48,8 @@ public class MyViewModel extends Observable implements Observer {
                 }
                 else{
                     this.maze = maze;
+                    rowChar = model.getRowChar();
+                    colChar = model.getColChar();
                 }
             }
             setChanged();
@@ -58,21 +62,17 @@ public class MyViewModel extends Observable implements Observer {
     }
 
     public void moveCharacter(KeyEvent keyEvent) {
-        int direction = -1;
-        switch (keyEvent.getCode()) {
-            case UP:
-                direction = 1;
-                break;
-            case DOWN:
-                direction = 2;
-                break;
-            case LEFT:
-                direction = 3;
-                break;
-            case RIGHT:
-                direction = 4;
-                break;
-        }
+        int direction = switch (keyEvent.getCode()) {
+            case NUMPAD8 -> 1; //UP
+            case NUMPAD2 -> 2; //Down
+            case NUMPAD4 -> 3; //Left
+            case NUMPAD6 -> 4; //Right
+            case NUMPAD9  -> 5; //UP-RIGHT
+            case NUMPAD7 -> 6; //UP-LEFT
+            case NUMPAD3-> 7; //DOWN-RIGHT
+            case NUMPAD1 -> 8; //DOWN-LEFT
+            default -> -1;
+        };
         model.updateCharacterLocation(direction);
     }
 
@@ -84,6 +84,13 @@ public class MyViewModel extends Observable implements Observer {
         return colChar;
     }
 
+    public void setRowChar(int rowChar) {
+        this.rowChar = rowChar;
+    }
+
+    public void setColChar(int colChar) {
+        this.colChar = colChar;
+    }
     public int getRowGoal() {
         return rowGoal;
     }
@@ -96,12 +103,12 @@ public class MyViewModel extends Observable implements Observer {
         return maze;
     }
 
-    public void solveMaze(Maze maze){
-        model.solveMaze(maze);
+    public void solveMaze(Maze maze,int row_player,int col_player){
+        model.solveMaze(maze,row_player,col_player);
     }
 
-    public void getSolution(){
-        model.getSolution();
+    public Solution getSolution(){
+        return model.getSolution();
     }
 
     public void saveGame(File saveFile) throws IOException {
@@ -110,4 +117,5 @@ public class MyViewModel extends Observable implements Observer {
     public void loadGame(File file) throws IOException, ClassNotFoundException {
         model.loadMaze(file);
     }
+
 }
