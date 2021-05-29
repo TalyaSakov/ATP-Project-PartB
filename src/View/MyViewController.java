@@ -233,8 +233,23 @@ public class MyViewController implements Initializable, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if(o instanceof MyViewModel)
+
+        if (arg == "loaded"){
+            try {
+                maze = myViewModel.getMaze();
+                Position startPosition = maze.getStartPosition();
+                set_update_player_position_row(startPosition.getRowIndex() + "");
+                set_update_player_position_col(startPosition.getColumnIndex() + "");
+                mazeDisplayer.set_player_position(myViewModel.getRowChar(),myViewModel.getColChar());
+                mazeDisplayer.set_goal_position();
+                mazeDisplayer.drawMaze(maze);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(o instanceof MyViewModel)
         {
+
             if(maze == null)//generateMaze
             {
                 this.maze = myViewModel.getMaze();

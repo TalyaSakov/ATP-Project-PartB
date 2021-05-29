@@ -7,6 +7,7 @@ import algorithms.search.BreadthFirstSearch;
 import algorithms.search.MazeState;
 import algorithms.search.SearchableMaze;
 import algorithms.search.Solution;
+import javafx.geometry.Pos;
 
 import java.io.*;
 import java.util.Observable;
@@ -20,6 +21,7 @@ MyModel extends Observable implements IModel {
     private int rowChar;
     private int colChar;
     private int rowGoal;
+
     private int colGoal;
 
     public MyModel(){
@@ -94,6 +96,9 @@ MyModel extends Observable implements IModel {
         Position startPosition = maze.getStartPosition();
         rowChar = startPosition.getRowIndex();
         colChar = startPosition.getColumnIndex();
+        Position goalPosition = maze.getGoalPosition();
+        rowGoal = goalPosition.getRowIndex();
+        colGoal = goalPosition.getColumnIndex();
         this.searchableMaze = new SearchableMaze(maze);
         setChanged();
         notifyObservers();
@@ -118,6 +123,16 @@ MyModel extends Observable implements IModel {
     public int getColGoal() {
         return colGoal;
     }
+
+
+    public void setRowGoal(int rowGoal) {
+        this.rowGoal = rowGoal;
+    }
+
+    public void setColGoal(int colGoal) {
+        this.colGoal = colGoal;
+    }
+
 
 
     @Override
@@ -209,24 +224,16 @@ MyModel extends Observable implements IModel {
                 row++;
             }
             br.close();
-            Position start = new Position(playerRowIdx, playerColIdx);
-            Position end  = new Position(goalRowIdx, goalColIdx);
-
-
             this.maze = new Maze(mazeNumOfRows,mazeNumOfCols);
-            for(int i = 0; i < mazeNumOfRows; i++) {
-                for (int j = 0; j < mazeNumOfCols; j++) {
-                    this.maze.getMaze()[i][j] = grid[i][j];
-                }
-            }
-            this.maze.setStartPosition(start.getRowIndex(),start.getColumnIndex());
-            this.maze.setEndPosition(end.getRowIndex() , end.getColumnIndex());
+            this.maze.setMaze(grid);
 
-            this.rowChar = playerColIdx;
-            this.colChar = playerRowIdx;
-            this.rowGoal = rowChar;
-            this.colGoal = colChar;
-            //isMazeExist = true;
+            this.maze.setStartPosition(playerRowIdx,playerColIdx);
+            this.maze.setEndPosition(goalRowIdx,goalColIdx);
+            this.rowChar = playerRowIdx;
+            this.colChar = playerColIdx;
+
+            this.rowGoal = goalRowIdx;
+            this.colGoal = goalColIdx;
             setChanged();
             notifyObservers("loaded");
         } catch (IOException e){

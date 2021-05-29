@@ -29,7 +29,18 @@ public class MyViewModel extends Observable implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o instanceof IModel) {
+        if (arg == "loaded"){
+            rowChar = model.getRowChar();
+            colChar = model.getColChar();
+            rowGoal = model.getRowGoal();
+            colGoal = model.getColGoal();
+            maze = model.getMaze();
+            maze.setStartPosition(rowChar,colChar);
+            maze.setEndPosition(rowGoal,colGoal);
+            setChanged();
+            notifyObservers("loaded");
+        }
+        else if (o instanceof IModel) {
             if (maze == null) { //Generate maze
                 this.maze = model.getMaze();
             } else {
