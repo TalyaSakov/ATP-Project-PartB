@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -50,6 +51,7 @@ public class MyViewController implements Initializable, Observer {
     @FXML
     public MazeDisplayer mazeDisplayer;
     public javafx.scene.Node GridPane_newMaze;
+    public BorderPane borderPane;
 
     private Stage primaryStage;
 
@@ -73,6 +75,7 @@ public class MyViewController implements Initializable, Observer {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         lbl_player_row.textProperty().bind(update_player_position_row);
         lbl_player_column.textProperty().bind(update_player_position_col);
+
     }
 
     public void generateMaze(ActionEvent actionEvent) throws FileNotFoundException {

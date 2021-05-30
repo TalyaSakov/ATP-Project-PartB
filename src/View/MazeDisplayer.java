@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javafx.scene.image.Image;
 
@@ -30,6 +31,49 @@ public class MazeDisplayer extends Canvas {
     StringProperty imageGoalIcon = new SimpleStringProperty();
     StringProperty imageSolution= new SimpleStringProperty();
     StringProperty imageTree= new SimpleStringProperty();
+
+    public String getImageBackground1() {
+        return imageBackground1.get();
+    }
+
+
+
+    public void setImageBackground1(String imageBackground1) {
+        this.imageBackground1.set(imageBackground1);
+    }
+
+    public String getImageBackground2() {
+        return imageBackground2.get();
+    }
+
+
+    public void setImageBackground2(String imageBackground2) {
+        this.imageBackground2.set(imageBackground2);
+    }
+
+    public String getImageBackground3() {
+        return imageBackground3.get();
+    }
+
+
+    public void setImageBackground3(String imageBackground3) {
+        this.imageBackground3.set(imageBackground3);
+    }
+
+    public String getImageBackground4() {
+        return imageBackground4.get();
+    }
+
+
+    public void setImageBackground4(String imageBackground4) {
+        this.imageBackground4.set(imageBackground4);
+    }
+
+    StringProperty imageBackground1 = new SimpleStringProperty();
+    StringProperty imageBackground2 = new SimpleStringProperty();
+    StringProperty imageBackground3= new SimpleStringProperty();
+    StringProperty imageBackground4= new SimpleStringProperty();
+
 
     public String getImageTree() {
         return imageTree.get();
@@ -160,7 +204,7 @@ public class MazeDisplayer extends Canvas {
             Image solutionPathImage = null;
             try{
                 treeImage = new Image(new FileInputStream(getImageTree()));
-                grass = new Image(new FileInputStream(getImageFileNameWall()));
+                grass = new Image(new FileInputStream(getBackGround()));
                 solutionPathImage = new Image(new FileInputStream(getImageSolution()));
             } catch(FileNotFoundException e){
                 System.out.println("File not found");
@@ -194,6 +238,17 @@ public class MazeDisplayer extends Canvas {
                 solution = null;
             drawPlayerAndGoal(cellHeight, cellWidth, graphicsContext);
         }
+    }
+
+    private String getBackGround() {
+        Random rd = new Random();
+        return switch (rd.nextInt(3)) {
+            case 0 -> getImageBackground1();
+            case 1 -> getImageBackground2();
+            case 2 -> getImageBackground3();
+            case 3 -> getImageBackground4();
+            default -> null;
+        };
     }
 
     private void drawPlayerAndGoal(double cellHeight, double cellWidth, GraphicsContext graphicsContext) {
