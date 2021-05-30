@@ -85,7 +85,7 @@ public class MyViewController implements Initializable, Observer {
         mazeDisplayer.drawMaze(myViewModel.getMaze());
     }
 
-    public void solveMaze() {
+    public void solveMaze() throws FileNotFoundException {
         myViewModel.solveMaze(maze,mazeDisplayer.getRow_player(),mazeDisplayer.getColumn_player());
         mazeDisplayer.drawSolution(myViewModel.getSolution());
     }

@@ -24,10 +24,21 @@ public class MazeDisplayer extends Canvas {
     private int row_goal;
     private int col_goal;
     private boolean firstRun = true;
+    private Solution solution = null;
     StringProperty imageFileNameWall = new SimpleStringProperty();
     StringProperty imageFileNamePlayer = new SimpleStringProperty();
     StringProperty imageGoalIcon = new SimpleStringProperty();
     StringProperty imageSolution= new SimpleStringProperty();
+    StringProperty imageTree= new SimpleStringProperty();
+
+    public String getImageTree() {
+        return imageTree.get();
+    }
+
+    public void setImageTree(String imageTree) {
+        this.imageTree.set(imageTree);
+    }
+
 
 
     public String getImageGoalIcon() {
@@ -86,43 +97,48 @@ public class MazeDisplayer extends Canvas {
         drawMaze();
     }
 
-    public void drawSolution(Solution solution) {
-        try {
-            /*get Maze Canvas dimensions */
-            double width = getWidth();
-            double height = getHeight();
-            /*get single cell dimesions */
-            double cellHeight = height / maze.getMaze().length;
-            double cellWidth = width / maze.getMaze()[0].length;
-            /* create Image instance of the Solution-step Image */
-            Image solutionPathImage = null;
-            solutionPathImage = new Image(new FileInputStream(getImageSolution()));
-            /* create Image instance of the Wall-Brick Image */
-            Image wallImage = null;
-            wallImage = new Image(new FileInputStream(getImageFileNameWall()));
-            int[][] matrix = maze.getMaze();
-            GraphicsContext graphicsContext = getGraphicsContext2D();
-            /* reset the Maze canvas */
-            graphicsContext.clearRect(0, 0, getWidth(), getHeight());
-            /*Draw walls and goal point*/
-            ArrayList<AState> path = solution.getSolutionPath();
-            for (int i = 0; i < matrix.length; i++) {
-                for (int j = 0; j < matrix[i].length; j++) {
-                    if (matrix[i][j] == 1) {
-                        graphicsContext.drawImage(wallImage, j * cellWidth, i * cellHeight, cellWidth, cellHeight);
-                    }
-                    /*if this cell is part of the path draw the solution path image */
-                    AState p = new MazeState(i,j);//using generic AState makes sense design-wise
-                    if (path.contains(p)) {
-                        graphicsContext.drawImage(solutionPathImage, j * cellWidth, i * cellHeight, cellWidth, cellHeight);
-                    }
-                }
-            }
-            drawPlayerAndGoal(cellHeight,cellWidth,graphicsContext);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void drawSolution(Solution solution) throws FileNotFoundException {
+    this.solution = solution;
+    drawMaze();
     }
+
+//    public void drawSolution(Solution solution) {
+//        try {
+//            /*get Maze Canvas dimensions */
+//            double width = getWidth();
+//            double height = getHeight();
+//            /*get single cell dimesions */
+//            double cellHeight = height / maze.getMaze().length;
+//            double cellWidth = width / maze.getMaze()[0].length;
+//            /* create Image instance of the Solution-step Image */
+//            Image solutionPathImage = null;
+//            solutionPathImage = new Image(new FileInputStream(getImageSolution()));
+//            /* create Image instance of the Wall-Brick Image */
+//            Image wallImage = null;
+//            wallImage = new Image(new FileInputStream(getImageFileNameWall()));
+//            int[][] matrix = maze.getMaze();
+//            GraphicsContext graphicsContext = getGraphicsContext2D();
+//            /* reset the Maze canvas */
+//            graphicsContext.clearRect(0, 0, getWidth(), getHeight());
+//            /*Draw walls and goal point*/
+//            ArrayList<AState> path = solution.getSolutionPath();
+//            for (int i = 0; i < matrix.length; i++) {
+//                for (int j = 0; j < matrix[i].length; j++) {
+//                    if (matrix[i][j] == 1) {
+//                        graphicsContext.drawImage(wallImage, j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+//                    }
+//                    /*if this cell is part of the path draw the solution path image */
+//                    AState p = new MazeState(i,j);//using generic AState makes sense design-wise
+//                    if (path.contains(p)) {
+//                        graphicsContext.drawImage(solutionPathImage, j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+//                    }
+//                }
+//            }
+//            drawPlayerAndGoal(cellHeight,cellWidth,graphicsContext);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void drawMaze() throws FileNotFoundException {
         if(maze != null){
@@ -139,26 +155,43 @@ public class MazeDisplayer extends Canvas {
             //clear the canvas:
             graphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
             graphicsContext.setFill(Color.RED);
-            Image wallImage = null;
+            Image grass = null;
+            Image treeImage = null;
+            Image solutionPathImage = null;
             try{
-                wallImage = new Image(new FileInputStream(getImageFileNameWall()));
+                treeImage = new Image(new FileInputStream(getImageTree()));
+                grass = new Image(new FileInputStream(getImageFileNameWall()));
+                solutionPathImage = new Image(new FileInputStream(getImageSolution()));
             } catch(FileNotFoundException e){
                 System.out.println("File not found");
             }
+            ArrayList<AState> path = null;
+            if (solution != null)
+                path = solution.getSolutionPath();
+            graphicsContext.drawImage(grass,0,0,canvasHeight,canvasWidth);
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
                     if(matrix[i][j] == 1){
                         //if it is a wall:
                         double w = j * cellWidth;
                         double h = i * cellHeight;
-                        if (wallImage ==null){
+                        if (treeImage ==null){
                         graphicsContext.fillRect(w,h, cellWidth, cellHeight);
                         }
                         else{
-                        graphicsContext.drawImage(wallImage,w,h,cellWidth,cellHeight);}
+                        graphicsContext.drawImage(treeImage,w,h,cellWidth,cellHeight);}
+
+                    }
+                    if (solution != null){
+                        AState p = new MazeState(i,j);
+                        if (path.contains(p)) {
+                            graphicsContext.drawImage(solutionPathImage, j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+                        }
                     }
                 }
             }
+            if (solution != null)
+                solution = null;
             drawPlayerAndGoal(cellHeight, cellWidth, graphicsContext);
         }
     }
@@ -184,5 +217,8 @@ public class MazeDisplayer extends Canvas {
         }
         graphicsContext.drawImage(goalImage,w_goal,h_goal, cellWidth, cellHeight);
     }
+
+
+
 
 }
