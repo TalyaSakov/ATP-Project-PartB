@@ -82,7 +82,7 @@ MyModel extends Observable implements IModel {
 
         }
         setChanged();
-        notifyObservers();
+        notifyObservers(direction);
      }
 
     @Override

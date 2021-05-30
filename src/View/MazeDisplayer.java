@@ -26,6 +26,7 @@ public class MazeDisplayer extends Canvas {
     private int col_goal;
     private boolean firstRun = true;
     private Solution solution = null;
+    private int charDirection = 0;
     StringProperty imageFileNameWall = new SimpleStringProperty();
     StringProperty imageFileNamePlayer = new SimpleStringProperty();
     StringProperty imageGoalIcon = new SimpleStringProperty();
@@ -74,6 +75,46 @@ public class MazeDisplayer extends Canvas {
     StringProperty imageBackground3= new SimpleStringProperty();
     StringProperty imageBackground4= new SimpleStringProperty();
 
+    StringProperty imagePlayerUp = new SimpleStringProperty();
+    StringProperty imagePlayerDown = new SimpleStringProperty();
+    StringProperty imagePlayerLeft= new SimpleStringProperty();
+    StringProperty imagePlayerRight= new SimpleStringProperty();
+
+    public String getImagePlayerUp() {
+        return imagePlayerUp.get();
+    }
+
+    public void setImagePlayerUp(String imagePlayerUp) {
+        this.imagePlayerUp.set(imagePlayerUp);
+    }
+
+    public String getImagePlayerDown() {
+        return imagePlayerDown.get();
+    }
+
+
+    public void setImagePlayerDown(String imagePlayerDown) {
+        this.imagePlayerDown.set(imagePlayerDown);
+    }
+
+    public String getImagePlayerLeft() {
+        return imagePlayerLeft.get();
+    }
+
+    public void setImagePlayerLeft(String imagePlayerLeft) {
+        this.imagePlayerLeft.set(imagePlayerLeft);
+    }
+
+    public String getImagePlayerRight() {
+        return imagePlayerRight.get();
+    }
+
+
+    public void setImagePlayerRight(String imagePlayerRight) {
+        this.imagePlayerRight.set(imagePlayerRight);
+    }
+
+
 
     public String getImageTree() {
         return imageTree.get();
@@ -101,10 +142,10 @@ public class MazeDisplayer extends Canvas {
         this.row_goal = maze.getGoalPosition().getRowIndex();
         this.col_goal = maze.getGoalPosition().getColumnIndex();
     }
-    public void set_player_position(int row,int col) throws FileNotFoundException {
+    public void set_player_position(int row,int col,int direction) throws FileNotFoundException {
         this.row_player = row;
         this.column_player = col;
-        drawMaze();
+        drawMaze(direction);
     }
     public void setFirstRun(boolean firstRun) {
         this.firstRun = firstRun;
@@ -130,20 +171,21 @@ public class MazeDisplayer extends Canvas {
         return column_player;
     }
 
-    public void drawMaze(Maze maze) throws FileNotFoundException {
+    public void drawMaze(Maze maze,int direction) throws FileNotFoundException {
         this.maze = maze;
         if (firstRun){
             Position startPosition = maze.getStartPosition();
-            set_player_position(startPosition.getRowIndex(),startPosition.getColumnIndex());
+            set_player_position(startPosition.getRowIndex(),startPosition.getColumnIndex(),0);
             firstRun = false;
         }
         set_goal_position();
-        drawMaze();
+        charDirection = direction;
+        drawMaze(direction);
     }
 
     public void drawSolution(Solution solution) throws FileNotFoundException {
     this.solution = solution;
-    drawMaze();
+    drawMaze(charDirection);
     }
 
 //    public void drawSolution(Solution solution) {
@@ -184,7 +226,7 @@ public class MazeDisplayer extends Canvas {
 //        }
 //    }
 
-    private void drawMaze() throws FileNotFoundException {
+    private void drawMaze(int direction) throws FileNotFoundException {
         if(maze != null){
             int [][] matrix = maze.getMaze();
             double canvasHeight = getHeight();
@@ -236,13 +278,14 @@ public class MazeDisplayer extends Canvas {
             }
             if (solution != null)
                 solution = null;
-            drawPlayerAndGoal(cellHeight, cellWidth, graphicsContext);
+            charDirection = direction;
+            drawPlayerAndGoal(cellHeight, cellWidth, graphicsContext,direction);
         }
     }
 
     private String getBackGround() {
         Random rd = new Random();
-        return switch (rd.nextInt(3)) {
+        return switch (1) {
             case 0 -> getImageBackground1();
             case 1 -> getImageBackground2();
             case 2 -> getImageBackground3();
@@ -251,12 +294,12 @@ public class MazeDisplayer extends Canvas {
         };
     }
 
-    private void drawPlayerAndGoal(double cellHeight, double cellWidth, GraphicsContext graphicsContext) {
+    private void drawPlayerAndGoal(double cellHeight, double cellWidth, GraphicsContext graphicsContext , int direction) {
         double h_player = getRow_player() * cellHeight;
         double w_player = getColumn_player() * cellWidth;
         Image playerImage = null;
         try{
-        playerImage = new Image(new FileInputStream(getImageFileNamePlayer()));
+        playerImage = new Image(new FileInputStream(getPlayerImage(direction)));
         }catch(FileNotFoundException e){
             System.out.println("File of player not found");
         }
@@ -273,7 +316,19 @@ public class MazeDisplayer extends Canvas {
         graphicsContext.drawImage(goalImage,w_goal,h_goal, cellWidth, cellHeight);
     }
 
-
+    private String getPlayerImage(int direction) {
+        return switch (direction) {
+            case 2 -> getImagePlayerDown(); //down
+            case 4-> getImagePlayerRight(); //right
+            case 3 -> getImagePlayerLeft(); //left
+            case 1 -> getImagePlayerUp(); //up
+            case 5 -> getImagePlayerRight(); //down
+            case 6 -> getImagePlayerLeft(); //right
+            case 7 -> getImagePlayerRight(); //left
+            case 8 -> getImagePlayerLeft(); //up
+            default -> getImagePlayerDown();
+        };
+    }
 
 
 }

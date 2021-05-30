@@ -85,7 +85,7 @@ public class MyViewController implements Initializable, Observer {
         int cols = Integer.valueOf(textField_mazeColumns.getText());
         myViewModel.generateMaze(rows,cols);
         mazeDisplayer.setFirstRun(true);
-        mazeDisplayer.drawMaze(myViewModel.getMaze());
+        mazeDisplayer.drawMaze(myViewModel.getMaze(),0);
     }
 
     public void solveMaze() throws FileNotFoundException {
@@ -243,16 +243,15 @@ public class MyViewController implements Initializable, Observer {
                 Position startPosition = maze.getStartPosition();
                 set_update_player_position_row(startPosition.getRowIndex() + "");
                 set_update_player_position_col(startPosition.getColumnIndex() + "");
-                mazeDisplayer.set_player_position(myViewModel.getRowChar(),myViewModel.getColChar());
+                mazeDisplayer.set_player_position(myViewModel.getRowChar(),myViewModel.getColChar(),0);
                 mazeDisplayer.set_goal_position();
-                mazeDisplayer.drawMaze(maze);
+                mazeDisplayer.drawMaze(maze,0);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
         else if(o instanceof MyViewModel)
         {
-
             if(maze == null)//generateMaze
             {
                 this.maze = myViewModel.getMaze();
@@ -260,7 +259,7 @@ public class MyViewController implements Initializable, Observer {
                 try {
                     set_update_player_position_row(startPosition.getRowIndex() + "");
                     set_update_player_position_col(startPosition.getColumnIndex() + "");
-                    mazeDisplayer.drawMaze(maze);
+                    mazeDisplayer.drawMaze(maze,0);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -283,7 +282,8 @@ public class MyViewController implements Initializable, Observer {
                         set_update_player_position_row(rowFromViewModel + "");
                         set_update_player_position_col(colFromViewModel + "");
                         try {
-                            this.mazeDisplayer.set_player_position(rowFromViewModel,colFromViewModel);
+                            int direction = (int) arg;
+                            this.mazeDisplayer.set_player_position(rowFromViewModel,colFromViewModel,direction);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -296,7 +296,7 @@ public class MyViewController implements Initializable, Observer {
                         Position startPosition = maze.getStartPosition();
                         set_update_player_position_row(startPosition.getRowIndex() + "");
                         set_update_player_position_col(startPosition.getColumnIndex() + "");
-                        mazeDisplayer.drawMaze(maze);
+                        mazeDisplayer.drawMaze(maze,0);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }

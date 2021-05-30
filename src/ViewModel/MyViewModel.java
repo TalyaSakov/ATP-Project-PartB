@@ -64,7 +64,7 @@ public class MyViewModel extends Observable implements Observer {
                 }
             }
             setChanged();
-            notifyObservers();
+            notifyObservers(arg);
         }
     }
 
@@ -75,9 +75,13 @@ public class MyViewModel extends Observable implements Observer {
     public void moveCharacter(KeyEvent keyEvent) {
         int direction = switch (keyEvent.getCode()) {
             case NUMPAD8 -> 1; //UP
+            case UP -> 1;
             case NUMPAD2 -> 2; //Down
+            case DOWN -> 2;
             case NUMPAD4 -> 3; //Left
+            case LEFT ->3;
             case NUMPAD6 -> 4; //Right
+            case RIGHT ->4 ;
             case NUMPAD9  -> 5; //UP-RIGHT
             case NUMPAD7 -> 6; //UP-LEFT
             case NUMPAD3-> 7; //DOWN-RIGHT
