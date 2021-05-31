@@ -33,6 +33,35 @@ public class MazeDisplayer extends Canvas {
     StringProperty imageSolution= new SimpleStringProperty();
     StringProperty imageTree= new SimpleStringProperty();
 
+
+    StringProperty imageBackground1 = new SimpleStringProperty();
+    StringProperty imageBackground2 = new SimpleStringProperty();
+    StringProperty imageBackground3= new SimpleStringProperty();
+    StringProperty imageBackground4= new SimpleStringProperty();
+
+    StringProperty imagePlayerUp = new SimpleStringProperty();
+    StringProperty imagePlayerDown = new SimpleStringProperty();
+    StringProperty imagePlayerLeft= new SimpleStringProperty();
+    StringProperty imagePlayerRight= new SimpleStringProperty();
+
+    public MazeDisplayer(){
+        widthProperty().addListener(evt -> {
+            try {
+                drawMaze(0);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+        heightProperty().addListener(evt -> {
+            try {
+                drawMaze(0);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+
     public String getImageBackground1() {
         return imageBackground1.get();
     }
@@ -68,15 +97,6 @@ public class MazeDisplayer extends Canvas {
         this.imageBackground4.set(imageBackground4);
     }
 
-    StringProperty imageBackground1 = new SimpleStringProperty();
-    StringProperty imageBackground2 = new SimpleStringProperty();
-    StringProperty imageBackground3= new SimpleStringProperty();
-    StringProperty imageBackground4= new SimpleStringProperty();
-
-    StringProperty imagePlayerUp = new SimpleStringProperty();
-    StringProperty imagePlayerDown = new SimpleStringProperty();
-    StringProperty imagePlayerLeft= new SimpleStringProperty();
-    StringProperty imagePlayerRight= new SimpleStringProperty();
 
     public String getImagePlayerUp() {
         return imagePlayerUp.get();
@@ -321,6 +341,21 @@ public class MazeDisplayer extends Canvas {
             case 8 -> getImagePlayerLeft(); //up
             default -> getImagePlayerDown();
         };
+    }
+
+    @Override
+    public boolean isResizable() {
+        return true;
+    }
+
+    @Override
+    public double prefWidth(double height) {
+        return getWidth();
+    }
+
+    @Override
+    public double prefHeight(double width) {
+        return getHeight();
     }
 
 

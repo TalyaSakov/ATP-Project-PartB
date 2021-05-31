@@ -15,7 +15,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import View.*?>
+<?import View.MazeDisplayer?>
+<?import javafx.scene.layout.AnchorPane?>
 <BorderPane onMouseClicked="#mouseClicked" prefHeight="429.0" prefWidth="509.0" stylesheets="@MainStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
     <left>
         <VBox prefHeight="200.0" prefWidth="178.0" spacing="5.0" BorderPane.alignment="CENTER">
@@ -51,7 +52,7 @@
         </VBox>
     </left>
     <bottom>
-        <HBox prefWidth="508.0" BorderPane.alignment="CENTER">
+        <HBox prefHeight="8.0" prefWidth="546.0" BorderPane.alignment="CENTER">
             <children>
                 <Label text="Status bar" />
             </children>
@@ -74,7 +75,7 @@
                                 <MenuItem mnemonicParsing="false" onAction="#propertiesGame" text="Properties" />
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false"  onAction="#exitGame" text="Exit">
+                        <Menu mnemonicParsing="false" onAction="#exitGame" text="Exit">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#exitGame" text="Exit" />
                             </items></Menu>
@@ -92,10 +93,9 @@
         </VBox>
     </top>
     <center>
-        <Pane BorderPane.alignment="CENTER">
+        <Pane fx:id="MAINPANE" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" BorderPane.alignment="CENTER">
             <children>
-                <MazeDisplayer fx:id="mazeDisplayer" height="800.0" imageFileNamePlayer="./src/Resources/Images/sonic.png" imageBackground1="./src/Resources/Images/BG1.jpeg" imageBackground2="./src/Resources/Images/BG2.jpeg" imageBackground3="./src/Resources/Images/BG3.jpeg" imageBackground4="./src/Resources/Images/BG4.jpeg" imageGoalIcon="./src/Resources/Images/goal.png" imageFileNameWall="./src/Resources/Images/grass.jpeg" imageTree="./src/Resources/Images/tree.png" imageSolution="./src/Resources/Images/sol.png"
-                               imagePlayerUp="./src/Resources/Images/CharUp.png" imagePlayerDown="./src/Resources/Images/CharDown.png" imagePlayerLeft="./src/Resources/Images/Charleft.png" imagePlayerRight="./src/Resources/Images/CharRight.png" onKeyPressed="#keyPressed" width="800.0" />
+                <MazeDisplayer fx:id="mazeDisplayer" height="800.0" imageBackground1="./src/Resources/Images/BG1.jpeg" imageBackground2="./src/Resources/Images/BG2.jpeg" imageBackground3="./src/Resources/Images/BG3.jpeg" imageBackground4="./src/Resources/Images/BG4.jpeg" imageFileNamePlayer="./src/Resources/Images/sonic.png" imageFileNameWall="./src/Resources/Images/grass.jpeg" imageGoalIcon="./src/Resources/Images/goal.png" imagePlayerDown="./src/Resources/Images/CharDown.png" imagePlayerLeft="./src/Resources/Images/Charleft.png" imagePlayerRight="./src/Resources/Images/CharRight.png" imagePlayerUp="./src/Resources/Images/CharUp.png" imageSolution="./src/Resources/Images/sol.png" imageTree="./src/Resources/Images/tree.png" onKeyPressed="#keyPressed" width="800.0" />
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

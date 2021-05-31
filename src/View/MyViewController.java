@@ -4,6 +4,8 @@ import Server.Configurations;
 import ViewModel.MyViewModel;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
@@ -17,8 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,6 +50,8 @@ public class MyViewController implements Initializable, Observer {
     public TextField textField_mazeColumns;
     @FXML
     public MazeDisplayer mazeDisplayer;
+    @FXML
+    public Pane MAINPANE;
     public javafx.scene.Node GridPane_newMaze;
     public BorderPane borderPane;
     private Stage primaryStage;
@@ -83,7 +86,11 @@ public class MyViewController implements Initializable, Observer {
         int cols = Integer.valueOf(textField_mazeColumns.getText());
         myViewModel.generateMaze(rows,cols);
         mazeDisplayer.setFirstRun(true);
+
+        mazeDisplayer.widthProperty().bind(MAINPANE.widthProperty());
+        mazeDisplayer.heightProperty().bind(MAINPANE.heightProperty());
         mazeDisplayer.drawMaze(myViewModel.getMaze(),0);
+
     }
 
     public void solveMaze() throws FileNotFoundException {

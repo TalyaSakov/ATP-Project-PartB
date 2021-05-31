@@ -19,7 +19,10 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MyView.fxml"));
         Parent root = fxmlLoader.load();
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 1000, 800));
+        Scene scene = new Scene(root,400,200);
+        primaryStage.setScene(scene);
+//        primaryStage.minWidthProperty().bind(scene.heightProperty());
+//        primaryStage.minHeightProperty().bind(scene.widthProperty());
         primaryStage.show();
 
         IModel model = new MyModel();
