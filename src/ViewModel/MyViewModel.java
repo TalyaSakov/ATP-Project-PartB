@@ -118,8 +118,8 @@ public class MyViewModel extends Observable implements Observer {
         return maze;
     }
 
-    public void solveMaze(Maze maze,int row_player,int col_player){
-        model.solveMaze(maze,row_player,col_player);
+    public void solveMaze(int row_player,int col_player){
+        model.solveMaze(row_player,col_player);
     }
 
     public Solution getSolution(){

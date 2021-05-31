@@ -37,8 +37,6 @@ public class MazeDisplayer extends Canvas {
         return imageBackground1.get();
     }
 
-
-
     public void setImageBackground1(String imageBackground1) {
         this.imageBackground1.set(imageBackground1);
     }
@@ -92,7 +90,6 @@ public class MazeDisplayer extends Canvas {
         return imagePlayerDown.get();
     }
 
-
     public void setImagePlayerDown(String imagePlayerDown) {
         this.imagePlayerDown.set(imagePlayerDown);
     }
@@ -109,12 +106,9 @@ public class MazeDisplayer extends Canvas {
         return imagePlayerRight.get();
     }
 
-
     public void setImagePlayerRight(String imagePlayerRight) {
         this.imagePlayerRight.set(imagePlayerRight);
     }
-
-
 
     public String getImageTree() {
         return imageTree.get();
@@ -123,8 +117,6 @@ public class MazeDisplayer extends Canvas {
     public void setImageTree(String imageTree) {
         this.imageTree.set(imageTree);
     }
-
-
 
     public String getImageGoalIcon() {
         return imageGoalIcon.get();
@@ -314,6 +306,7 @@ public class MazeDisplayer extends Canvas {
             System.out.println("File of player not found");
         }
         graphicsContext.drawImage(goalImage,w_goal,h_goal, cellWidth, cellHeight);
+
     }
 
     private String getPlayerImage(int direction) {

@@ -37,7 +37,6 @@ public class MyViewController implements Initializable, Observer {
 
     private MyViewModel myViewModel;
     private Maze maze;
-
     @FXML
     public Label lbl_player_row;
     @FXML
@@ -52,7 +51,6 @@ public class MyViewController implements Initializable, Observer {
     public MazeDisplayer mazeDisplayer;
     public javafx.scene.Node GridPane_newMaze;
     public BorderPane borderPane;
-
     private Stage primaryStage;
 
 
@@ -89,7 +87,7 @@ public class MyViewController implements Initializable, Observer {
     }
 
     public void solveMaze() throws FileNotFoundException {
-        myViewModel.solveMaze(maze,mazeDisplayer.getRow_player(),mazeDisplayer.getColumn_player());
+        myViewModel.solveMaze(mazeDisplayer.getRow_player(),mazeDisplayer.getColumn_player());
         mazeDisplayer.drawSolution(myViewModel.getSolution());
     }
 
