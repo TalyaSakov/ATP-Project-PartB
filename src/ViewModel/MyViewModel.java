@@ -3,6 +3,7 @@ package ViewModel;
 import Model.IModel;
 import algorithms.mazeGenerators.Maze;
 import algorithms.search.Solution;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import java.io.File;
@@ -29,7 +30,18 @@ public class MyViewModel extends Observable implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o instanceof IModel) {
+        if (arg == "loaded"){
+            rowChar = model.getRowChar();
+            colChar = model.getColChar();
+            rowGoal = model.getRowGoal();
+            colGoal = model.getColGoal();
+            maze = model.getMaze();
+            maze.setStartPosition(rowChar,colChar);
+            maze.setEndPosition(rowGoal,colGoal);
+            setChanged();
+            notifyObservers("loaded");
+        }
+        else if (o instanceof IModel) {
             if (maze == null) { //Generate maze
                 this.maze = model.getMaze();
             } else {
@@ -53,7 +65,7 @@ public class MyViewModel extends Observable implements Observer {
                 }
             }
             setChanged();
-            notifyObservers();
+            notifyObservers(arg);
         }
     }
 
@@ -64,9 +76,32 @@ public class MyViewModel extends Observable implements Observer {
     public void moveCharacter(KeyEvent keyEvent) {
         int direction = switch (keyEvent.getCode()) {
             case NUMPAD8 -> 1; //UP
+            case UP -> 1;
             case NUMPAD2 -> 2; //Down
+            case DOWN -> 2;
             case NUMPAD4 -> 3; //Left
+            case LEFT ->3;
             case NUMPAD6 -> 4; //Right
+            case RIGHT ->4 ;
+            case NUMPAD9  -> 5; //UP-RIGHT
+            case NUMPAD7 -> 6; //UP-LEFT
+            case NUMPAD3-> 7; //DOWN-RIGHT
+            case NUMPAD1 -> 8; //DOWN-LEFT
+            default -> -1;
+        };
+        model.updateCharacterLocation(direction);
+    }
+
+    public void moveCharacter(KeyCode keyCode) {
+        int direction = switch (keyCode) {
+            case NUMPAD8 -> 1; //UP
+            case UP -> 1;
+            case NUMPAD2 -> 2; //Down
+            case DOWN -> 2;
+            case NUMPAD4 -> 3; //Left
+            case LEFT ->3;
+            case NUMPAD6 -> 4; //Right
+            case RIGHT ->4 ;
             case NUMPAD9  -> 5; //UP-RIGHT
             case NUMPAD7 -> 6; //UP-LEFT
             case NUMPAD3-> 7; //DOWN-RIGHT
@@ -103,8 +138,8 @@ public class MyViewModel extends Observable implements Observer {
         return maze;
     }
 
-    public void solveMaze(Maze maze,int row_player,int col_player){
-        model.solveMaze(maze,row_player,col_player);
+    public void solveMaze(int row_player,int col_player){
+        model.solveMaze(row_player,col_player);
     }
 
     public Solution getSolution(){
@@ -118,4 +153,7 @@ public class MyViewModel extends Observable implements Observer {
         model.loadMaze(file);
     }
 
+    public void exit() {
+        model.exit();
+    }
 }
