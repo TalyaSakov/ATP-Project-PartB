@@ -34,6 +34,7 @@ public class MyModel extends Observable implements IModel {
     private int colChar;
     private int rowGoal;
     private int colGoal;
+    //TODO: Add properties.
     public MyModel(){
         maze = null;
         searchableMaze = null;
@@ -220,7 +221,7 @@ public class MyModel extends Observable implements IModel {
         }
     }
 
-    public boolean Diagonal_Verification(int direction) {
+    public boolean Diagonal_Verification(int direction) { //TODO: fix Diagonals
         return switch (direction) {
             case 5 -> //UP-Right
                     ((rowChar != 0) && (maze.getMaze()[rowChar - 1][colChar+1] != 1) && (colChar != maze.getMaze()[0].length - 1) && (((maze.getMaze()[rowChar][colChar + 1] != 1)) || (maze.getMaze()[rowChar -1][colChar ]!= 1)));
@@ -271,7 +272,7 @@ public class MyModel extends Observable implements IModel {
         this.mazeGeneratingServer.stop();
         this.solveSearchProblemServer.stop();
     }
-    
+
     public void loadMaze(File file){
         int goalRowIdx = 0, goalColIdx = 0 , playerRowIdx = 0, playerColIdx= 0, mazeNumOfRows = 0, mazeNumOfCols = 0;
         try {

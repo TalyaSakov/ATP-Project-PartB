@@ -62,6 +62,11 @@ public class MyViewController implements Initializable, Observer {
     public BorderPane borderPane;
     private Stage primaryStage;
 
+    //TODO: ADD MUSIC
+    //TODO: ADD when getting to goal.
+    //TODO: Change buttons. (Colors and etc.)
+    //TODO: Make everything prettier.
+
 
     public void setMyViewModel(MyViewModel myViewModel) {
         this.myViewModel = myViewModel;
