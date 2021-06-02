@@ -22,8 +22,7 @@ import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 
-public class
-MyModel extends Observable implements IModel {
+public class MyModel extends Observable implements IModel {
 
     private Maze maze;
     private SearchableMaze searchableMaze;
@@ -267,6 +266,12 @@ MyModel extends Observable implements IModel {
 
     }
 
+    @Override
+    public void exit() {
+        this.mazeGeneratingServer.stop();
+        this.solveSearchProblemServer.stop();
+    }
+    
     public void loadMaze(File file){
         int goalRowIdx = 0, goalColIdx = 0 , playerRowIdx = 0, playerColIdx= 0, mazeNumOfRows = 0, mazeNumOfCols = 0;
         try {
@@ -318,5 +323,6 @@ MyModel extends Observable implements IModel {
             e.printStackTrace();
         }
 
-    }
+
+}
 }

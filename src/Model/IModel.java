@@ -19,5 +19,5 @@ public interface IModel {
     public Solution getSolution();
     public void saveMaze(File saveFile);
     public void loadMaze(File file);
-
+    public void exit();
 }

@@ -3,6 +3,7 @@ package ViewModel;
 import Model.IModel;
 import algorithms.mazeGenerators.Maze;
 import algorithms.search.Solution;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import java.io.File;
@@ -91,6 +92,25 @@ public class MyViewModel extends Observable implements Observer {
         model.updateCharacterLocation(direction);
     }
 
+    public void moveCharacter(KeyCode keyCode) {
+        int direction = switch (keyCode) {
+            case NUMPAD8 -> 1; //UP
+            case UP -> 1;
+            case NUMPAD2 -> 2; //Down
+            case DOWN -> 2;
+            case NUMPAD4 -> 3; //Left
+            case LEFT ->3;
+            case NUMPAD6 -> 4; //Right
+            case RIGHT ->4 ;
+            case NUMPAD9  -> 5; //UP-RIGHT
+            case NUMPAD7 -> 6; //UP-LEFT
+            case NUMPAD3-> 7; //DOWN-RIGHT
+            case NUMPAD1 -> 8; //DOWN-LEFT
+            default -> -1;
+        };
+        model.updateCharacterLocation(direction);
+    }
+
     public int getRowChar() {
         return rowChar;
     }
@@ -133,4 +153,7 @@ public class MyViewModel extends Observable implements Observer {
         model.loadMaze(file);
     }
 
+    public void exit() {
+        model.exit();
+    }
 }

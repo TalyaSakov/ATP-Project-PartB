@@ -9,21 +9,25 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+import javax.swing.text.html.ImageView;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -52,6 +56,8 @@ public class MyViewController implements Initializable, Observer {
     public MazeDisplayer mazeDisplayer;
     @FXML
     public Pane MAINPANE;
+    @FXML
+    public VBox VBox;
     public javafx.scene.Node GridPane_newMaze;
     public BorderPane borderPane;
     private Stage primaryStage;
@@ -77,6 +83,7 @@ public class MyViewController implements Initializable, Observer {
         lbl_player_row.textProperty().bind(update_player_position_row);
         lbl_player_column.textProperty().bind(update_player_position_col);
 
+
     }
 
     public void generateMaze(ActionEvent actionEvent) throws FileNotFoundException {
@@ -100,7 +107,12 @@ public class MyViewController implements Initializable, Observer {
 
     public void mouseClicked(MouseEvent mouseEvent) {
         mazeDisplayer.requestFocus();
+//        mouseDragged(mouseEvent);
+        EventHandler<MouseEvent> dragPlayer =
+                t -> mouseDragged(mouseEvent);
+        mazeDisplayer.setOnMouseDragged(dragPlayer);
     }
+
 
     public void keyPressed(KeyEvent keyEvent) throws FileNotFoundException {
         myViewModel.moveCharacter(keyEvent);
@@ -150,7 +162,9 @@ public class MyViewController implements Initializable, Observer {
         Button yesButton = new Button("Yes!");
         Button noButton = new Button("No!");
         noButton.setOnAction(e -> window.close());
-        yesButton.setOnAction(e -> System.exit(0));//Platform.exit();
+        yesButton.setOnAction(e ->
+                myViewModel.exit());
+                System.exit(0);//Platform.exit();
         VBox layout = new VBox(20);//Platform.exit();
         layout.getChildren().addAll(label, yesButton, noButton);
         layout.setAlignment(Pos.CENTER);
@@ -162,30 +176,31 @@ public class MyViewController implements Initializable, Observer {
     }
 
     public void helpGame () {
-        String help = "Game Instructions:\n"+
-                " You must bring the man to his destination. \n"+
-                "If you have difficulty, you can always click \n"+
-                " the Maze Solve button to get the optimal route.\n"+"" +
-                "TODo: Add detail about more things we will add";
-        popAlert("Help window", help);
+        try{
+            Stage helpStage = new Stage();
+            helpStage.setTitle("Help");
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root = fxmlLoader.load(getClass().getResource("Help.fxml").openStream());
+            Scene scene = new Scene(root, 515, 650);//possible to specify w and h
+            helpStage.setScene(scene);
+            helpStage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            helpStage.show();
+        }catch (Exception e){ }
+
     }
 
-
     public void aboutGame () {
-        String strAbout = "This game was created as part of the course\n" +
-                "Advanced Topic In Programing\n" +
-                "At the PartA, We built a maze based on a Prime algorithm.\n" +
-                "Then,we solved it using algorithms: Breadth-first search, \n"+
-                "Best-first search and depth-first search (here we use BFS to get an optimal solution).\n" +
-
-                "At PartB , using Threads, we managed a server and client interface\n"+
-                "and allowed multiple clients to access the maze.\n"+
-                "We compress the maze in a decimal method\n" +
-                "The transfer of information between the server and the client was performed by\n"+
-                "compressing the maze in a decimal method.\n"+
-                "©Jonathan Pelah & Talya Sakov" ;
-
-        popAlert("About the game", strAbout);
+        try {
+            Stage aboutStage = new Stage();
+            aboutStage.setTitle("About");
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root = fxmlLoader.load(getClass().getResource("About.fxml").openStream());
+            Scene scene = new Scene(root, 315, 400);//possible to specify w and h
+            aboutStage.setScene(scene);
+            aboutStage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            aboutStage.show();
+        } catch (Exception e) {
+        }
     }
     public void saveGame() throws IOException {
         FileChooser fileChooser = new FileChooser();
@@ -238,6 +253,39 @@ public class MyViewController implements Initializable, Observer {
         window.setScene(scene);
         window.showAndWait();
     }
+
+    public void mouseDragged(MouseEvent mouseEvent) {
+        if(myViewModel.getMaze() != null) {
+            int maximumSize = Math.max(myViewModel.getMaze().getMaze()[0].length, myViewModel.getMaze().getMaze().length);
+            double mousePosX=helperMouseDragged(maximumSize,mazeDisplayer.getHeight(),
+                    myViewModel.getMaze().getMaze().length,mouseEvent.getX(),mazeDisplayer.getWidth() / maximumSize,VBox.getWidth());
+            double mousePosY=helperMouseDragged(maximumSize,mazeDisplayer.getWidth(),
+                    myViewModel.getMaze().getMaze()[0].length,mouseEvent.getY(),mazeDisplayer.getHeight() / maximumSize,0);
+
+            System.out.println("X " + mousePosX);
+            System.out.println("Y " + mousePosY);
+            if ( mousePosX == myViewModel.getColChar() && mousePosY < myViewModel.getRowChar() )
+                myViewModel.moveCharacter(KeyCode.NUMPAD8);
+            else if (mousePosY == myViewModel.getRowChar() && mousePosX > myViewModel.getColChar() )
+                myViewModel.moveCharacter(KeyCode.NUMPAD6);
+            else if ( mousePosY == myViewModel.getRowChar() && mousePosX < myViewModel.getColChar() )
+                myViewModel.moveCharacter(KeyCode.NUMPAD4);
+            else if (mousePosX == myViewModel.getColChar() && mousePosY > myViewModel.getRowChar()  )
+                myViewModel.moveCharacter(KeyCode.NUMPAD2);
+        }
+    }
+    private  double helperMouseDragged(int maxsize, double canvasSize, int mazeSize,double mouseEvent,double temp,double extra){
+        double cellSize=canvasSize/maxsize;
+        double start = (canvasSize / 2 - (cellSize * mazeSize / 2)) / cellSize ;
+//        System.out.println("Start" + start);
+//        System.out.println("Extra " + extra);
+//        System.out.println("Mouse event "+mouseEvent);
+//        System.out.println("Temp " +temp );
+        double mouse = (int) (((mouseEvent) - start -extra) / temp);
+//        System.out.println("Mouse "+ mouse);
+        return mouse;
+    }
+
 
     @Override
     public void update(Observable o, Object arg) {
