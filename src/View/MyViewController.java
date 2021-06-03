@@ -129,8 +129,30 @@ public class MyViewController implements Initializable, Observer {
     }
     public  void  propertiesGame(){
         Properties prop = new Properties();
+        InputStream input = Configurations.class.getClassLoader().getResourceAsStream("src/Resources/config.properties");
+        // load a properties file
+        try {
+            prop.load(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // get value by key
+        String str = "Number of threads for each server = ";
+        str += prop.getProperty("threadPoolSize");
+        str += "\n";
+        str += "Generating algorithm = ";
+        str += prop.getProperty("mazeGenerator");
+        str += "\n";
+        str += "Searching algorithm = ";
+        str += prop.getProperty("searchingAlgorithm");
+        Stage window = new Stage();
 
-        InputStream input = Configurations.class.getClassLoader().getResourceAsStream("config.properties");
+        popAlert("maze properties", str);
+    }
+
+    public  void  changeSettings(){
+        Properties prop = new Properties();
+        InputStream input = Configurations.class.getClassLoader().getResourceAsStream("src/Resources/config.properties");
         // load a properties file
         try {
             prop.load(input);
@@ -138,18 +160,13 @@ public class MyViewController implements Initializable, Observer {
             e.printStackTrace();
         }
 
-        // get value by key
-        String str = "Tread = ";
-        str += prop.getProperty("Tread");
-        str += "\n";
-        str += "Solution = ";
-        str += prop.getProperty("sol");
-        str += "\n";
-        str += "Maze = ";
-        str += prop.getProperty("maze");
         Stage window = new Stage();
 
-        popAlert("maze properties", str);
+        //EXMAPLE: prop.setProperty("mazeGenerator","myMazeGenerator");
+        //EXMAPLE: prop.setProperty("threadPoolSize","8");
+        //EXMAPLE: prop.setProperty("searchingAlgorithm","DepthFirstSearch");
+
+        popAlert("CHANGE SETTINGS", "CHANGE SETTINGS"); //TODO: settings platform
     }
 
     public  void  exitGame(){
