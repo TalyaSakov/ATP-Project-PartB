@@ -8,11 +8,8 @@ import Server.Server;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.mazeGenerators.Position;
-import algorithms.search.BreadthFirstSearch;
-import algorithms.search.MazeState;
-import algorithms.search.SearchableMaze;
+import algorithms.search.*;
 import Server.*;
-import algorithms.search.Solution;
 import javafx.geometry.Pos;
 
 
@@ -21,6 +18,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Properties;
 
 public class MyModel extends Observable implements IModel {
 
@@ -35,7 +33,7 @@ public class MyModel extends Observable implements IModel {
     private int rowGoal;
     private int colGoal;
     //TODO: Add properties.
-    public MyModel(){
+    public MyModel() throws IOException, InterruptedException {
         maze = null;
         searchableMaze = null;
         rowChar = 0;
@@ -326,4 +324,46 @@ public class MyModel extends Observable implements IModel {
 
 
 }
+
+
+    public static void changeProperty( String key, String value) throws IOException {
+
+        Properties properties = new Properties();
+        try {
+            String propertiesFilePath = ("src/Resources/config.properties");
+            FileInputStream fis = new FileInputStream(propertiesFilePath);
+            properties.load(fis);
+            switch (key) {
+                case ("mazeGenerator"):
+                    if (verifyMazeGenerator(value)) {
+                        properties.setProperty("mazeGenerator", value);
+                    }
+                case ("searchingAlgorithm"):
+                    if (verifySearchingAlgorithm(value)) {
+                        properties.setProperty("searchingAlgorithm", value);
+                    }
+                case ("threadPoolSize"):
+                    if (verifyThreadPoolSize(value)) {
+                        properties.setProperty("threadPoolSize", value);
+                    }
+            }
+            FileOutputStream fos = new FileOutputStream(propertiesFilePath);
+            properties.store(fos, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean verifyThreadPoolSize(String value) {
+        int number = Integer.parseInt(value);
+        return (number >= 1 && number <= 20);
+    }
+
+    private static boolean verifySearchingAlgorithm(String value) {
+        return (value.equals("DepthFirstSearch") || value.equals("BestFirstSearch") || value.equals(
+                "BreadthFirstSearch"));}
+
+
+    private static boolean verifyMazeGenerator(String value) {
+        return (value.equals("myMazeGenerator") || value.equals("simpleMazeGenerator"));}
 }
