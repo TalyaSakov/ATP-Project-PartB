@@ -151,22 +151,16 @@ public class MyViewController implements Initializable, Observer {
     }
 
     public  void  changeSettings(){
-        Properties prop = new Properties();
-        InputStream input = Configurations.class.getClassLoader().getResourceAsStream("src/Resources/config.properties");
-        // load a properties file
-        try {
-            prop.load(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Stage window = new Stage();
-
-        //EXMAPLE: prop.setProperty("mazeGenerator","myMazeGenerator");
-        //EXMAPLE: prop.setProperty("threadPoolSize","8");
-        //EXMAPLE: prop.setProperty("searchingAlgorithm","DepthFirstSearch");
-
-        popAlert("CHANGE SETTINGS", "CHANGE SETTINGS"); //TODO: settings platform
+        try{
+            Stage helpStage = new Stage();
+            helpStage.setTitle("changeSettings");
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root = fxmlLoader.load(getClass().getResource("Properties.fxml").openStream());
+            Scene scene = new Scene(root, 315, 400);//possible to specify w and h
+            helpStage.setScene(scene);
+            helpStage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            helpStage.show();
+        }catch (Exception e){ }
     }
 
     public  void  exitGame(){
