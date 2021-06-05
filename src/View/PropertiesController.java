@@ -9,19 +9,26 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 import java.util.ResourceBundle;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class PropertiesController {
+public class PropertiesController implements Initializable {
     public Stage stage;
     public TextField numOfThreads;
     public String poolSize;
     public ChoiceBox<String> searchingAlgorithm;
-    public ChoiceBox<String> generator;
+    public ChoiceBox<String> mazeGenerator;
 
-    public PropertiesController() {
-    }
+    private String algorithmString;
+    private String generatorString;
+    private int threadNum;
+
+    public PropertiesController() { }
 
     public Stage getStage() {
         return this.stage;
@@ -30,79 +37,43 @@ public class PropertiesController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            Properties properties = new Properties();
-            properties.load(new FileInputStream("resources/config.properties"));
-            Properties prop = new Properties();
-            InputStream input = Configurations.class.getClassLoader().getResourceAsStream("src/Resources/config.properties");
 
-            try {
-                prop.load(input);
-            } catch (IOException var8) {
-                var8.printStackTrace();
-            }
+        ObservableList<String> generatorsViewrs=FXCollections.observableArrayList( "myMazeGenerator","simpleMazeGenerator");
+       mazeGenerator.setItems(generatorsViewrs);
+        String currGenerator ="myMazeGenerator";// Configurations.getInstance().mazeGeneratingAlgorithm().getClass().getName();
+        this.mazeGenerator.setValue(currGenerator);
 
-            this.poolSize = this.numOfThreads.getText();
-            String a1 = properties.getProperty("searchingAlgorithm");
-            String a2 = properties.getProperty("mazeGenerator");
+        ObservableList<String> algoViewrs=FXCollections.observableArrayList( "BreadthFirstSearch","DepthFirstSearch", "BestFirstSearch");
+        searchingAlgorithm.setItems(algoViewrs);
+        String currSearchAlgo = Configurations.getInstance().mazeSearchingAlgorithm().getName();
+        this.searchingAlgorithm.setValue(currSearchAlgo);
 
-
-            if (a1.equals("BestFirstSearch")) {
-                this.searchingAlgorithm.setValue("BestFirstSearch");
-            } else if (a1.equals("DepthFirstSearch")) {
-                this.searchingAlgorithm.setValue("DepthFirstSearch");
-            } else if (a1.equals("BreadthFirstSearch")) {
-                this.searchingAlgorithm.setValue("BreadthFirstSearch");
-            }
-
-            if (a2.equals("myMazeGenerator")) {
-                this.generator.setValue("myMazeGenerator");
-            } else if (a2.equals("simpleMazeGenerator")) {
-                this.generator.setValue("simpleMazeGenerator");
-            }
-
-            if (properties.getProperty("searchingAlgorithm").equals("BestFirstSearch")) {
-                this.searchingAlgorithm.setValue("BestFirstSearch");
-            } else if (properties.getProperty("searchingAlgorithm").equals("DepthFirstSearch")) {
-                this.searchingAlgorithm.setValue("DepthFirstSearch");
-            } else if (properties.getProperty("searchingAlgorithm").equals("BreadthFirstSearch")) {
-                this.searchingAlgorithm.setValue("BreadthFirstSearch");
-            }
-
-            if (properties.getProperty("generator").equals("MyMazeGenerator")) {
-                this.generator.setValue("MyMazeGenerator");
-            }
-
-            if (properties.getProperty("generator").equals("SimpleMazeGenerator")) {
-                this.generator.setValue("SimpleMazeGenerator");
-            }
+        int currPoolSize = Configurations.getInstance().threadPoolSize();
+        this.poolSize = String.valueOf(currPoolSize);
 
 
 
+    }
+        public void UpdateClicked () {
+            System.out.println("Properties: saveChanges");
+            algorithmString = searchingAlgorithm.getValue();
+            generatorString = mazeGenerator.getValue();
+            this.poolSize=this.numOfThreads.getText();
+            threadNum =  Integer.valueOf(poolSize);
 
 
-            prop.setProperty("mazeGenerator", (String)this.generator.getValue());
-            System.out.println("maze genertorrrrr" + Configurations.getInstance().mazeGeneratingAlgorithm().getClass().getName());
-            prop.setProperty("searchingAlgorithm", (String)this.searchingAlgorithm.getValue());
-            System.out.println("serchinggggg" + Configurations.getInstance().mazeSearchingAlgorithm().getName());
-            prop.setProperty("threadPoolSize", this.poolSize);
-        } catch (FileNotFoundException var9) {
-            var9.printStackTrace();
-        } catch (IOException var10) {
-            var10.printStackTrace();
+            Configurations.getInstance().setMazeGeneratingAlgorithm(generatorString);
+            Configurations.getInstance().setMazeSearchingAlgorithm(algorithmString);
+            Configurations.getInstance().setThreadPoolSize(threadNum);
+            Configurations.start();
+
+            System.out.println(generatorString);
+            System.out.println(algorithmString);
+            System.out.println(threadNum);
+            stage.close();
         }
 
-    }
 
-    public void UpdateClicked() {
-
-        Configurations.getInstance().setMazeGeneratingAlgorithm(this.generator.getValue());
-        Configurations.getInstance().setMazeSearchingAlgorithm((this.searchingAlgorithm.getValue()));
-
-    }
-
-    public void submit() throws FileNotFoundException {
-    }
 }

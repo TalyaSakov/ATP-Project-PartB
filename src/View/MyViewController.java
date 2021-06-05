@@ -138,13 +138,13 @@ public class MyViewController implements Initializable, Observer {
         }
         // get value by key
         String str = "Number of threads for each server = ";
-        str += prop.getProperty("threadPoolSize");
+        str += Configurations.getInstance().threadPoolSize();
         str += "\n";
         str += "Generating algorithm = ";
         str += prop.getProperty("mazeGenerator");
         str += "\n";
         str += "Searching algorithm = ";
-        str += prop.getProperty("searchingAlgorithm");
+        str +=Configurations.getInstance().mazeSearchingAlgorithm().getName();
         Stage window = new Stage();
 
         popAlert("maze properties", str);
