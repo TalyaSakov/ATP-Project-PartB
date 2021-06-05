@@ -46,7 +46,9 @@ public class PropertiesController {
 
             this.poolSize = this.numOfThreads.getText();
             String a1 = properties.getProperty("searchingAlgorithm");
-            String a2 = properties.getProperty("generator");
+            String a2 = properties.getProperty("mazeGenerator");
+
+
             if (a1.equals("BestFirstSearch")) {
                 this.searchingAlgorithm.setValue("BestFirstSearch");
             } else if (a1.equals("DepthFirstSearch")) {
@@ -55,12 +57,10 @@ public class PropertiesController {
                 this.searchingAlgorithm.setValue("BreadthFirstSearch");
             }
 
-            if (a2.equals("MyMazeGenerator")) {
-                this.generator.setValue("MyMazeGenerator");
-            } else if (a2.equals("SimpleMazeGenerator")) {
-                this.generator.setValue("SimpleMazeGenerator");
-            } else if (a2.equals("EmptyMazeGenerator")) {
-                this.generator.setValue("EmptyMazeGenerator");
+            if (a2.equals("myMazeGenerator")) {
+                this.generator.setValue("myMazeGenerator");
+            } else if (a2.equals("simpleMazeGenerator")) {
+                this.generator.setValue("simpleMazeGenerator");
             }
 
             if (properties.getProperty("searchingAlgorithm").equals("BestFirstSearch")) {
@@ -79,6 +79,10 @@ public class PropertiesController {
                 this.generator.setValue("SimpleMazeGenerator");
             }
 
+
+
+
+
             prop.setProperty("mazeGenerator", (String)this.generator.getValue());
             System.out.println("maze genertorrrrr" + Configurations.getInstance().mazeGeneratingAlgorithm().getClass().getName());
             prop.setProperty("searchingAlgorithm", (String)this.searchingAlgorithm.getValue());
@@ -93,8 +97,10 @@ public class PropertiesController {
     }
 
     public void UpdateClicked() {
-        Configurations.getInstance().setMazeGeneratingAlgorithm((String)this.generator.getValue());
-        Configurations.getInstance().setMazeSearchingAlgorithm((String)this.searchingAlgorithm.getValue());
+
+        Configurations.getInstance().setMazeGeneratingAlgorithm(this.generator.getValue());
+        Configurations.getInstance().setMazeSearchingAlgorithm((this.searchingAlgorithm.getValue()));
+
     }
 
     public void submit() throws FileNotFoundException {
