@@ -78,6 +78,25 @@ public class PropertiesController implements Initializable {
             Configurations.getInstance().setMazeSearchingAlgorithm(algorithmString);
             Configurations.getInstance().setThreadPoolSize(threadNum);
             Configurations.start();
+            Stage window = new Stage();
+            window.initModality(Modality.APPLICATION_MODAL);
+            window.setTitle("success");
+            window.setMinWidth(250);
+            window.setMinHeight(350);
+
+            Label label = new Label();
+            label.setText("Changing settings completed successfully.\n"+"You can see the current state of settings \n"+ "in the \"show properties\" button. ");
+            Button closeButton = new Button("Close this window");
+            closeButton.setOnAction(e -> window.close());
+
+            VBox layout = new VBox(20);
+            layout.getChildren().addAll(label, closeButton);
+            layout.setAlignment(Pos.CENTER);
+
+            //Display window and wait for it to be closed before returning
+            Scene scene = new Scene(layout);
+            window.setScene(scene);
+            window.showAndWait();
 
 
         }
