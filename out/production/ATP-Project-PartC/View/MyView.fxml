@@ -71,7 +71,7 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="Options">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#propertiesGame" text="Properties" />
+<!--                                <MenuItem mnemonicParsing="false" onAction="#propertiesGame" text="Properties" />-->
                         <MenuItem mnemonicParsing="false" onAction="#changeSettings" text="Change Settings" />
                             </items>
                         </Menu>

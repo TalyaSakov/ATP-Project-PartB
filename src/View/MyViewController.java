@@ -127,28 +127,28 @@ public class MyViewController implements Initializable, Observer {
     public  void  newGame(){
         GridPane_newMaze.setVisible(true);
     }
-    public  void  propertiesGame(){
-        Properties prop = new Properties();
-        InputStream input = Configurations.class.getClassLoader().getResourceAsStream("src/Resources/config.properties");
-        // load a properties file
-        try {
-            prop.load(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+  //  public  void  propertiesGame(){
+//        Properties prop = new Properties();
+//        InputStream input = Configurations.class.getClassLoader().getResourceAsStream("src/Resources/config.properties");
+//        // load a properties file
+//        try {
+//            prop.load(input);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         // get value by key
-        String str = "Number of threads for each server = ";
-        str += Configurations.getInstance().threadPoolSize();
-        str += "\n";
-        str += "Generating algorithm = ";
-        str += prop.getProperty("mazeGenerator");
-        str += "\n";
-        str += "Searching algorithm = ";
-        str +=Configurations.getInstance().mazeSearchingAlgorithm().getName();
-        Stage window = new Stage();
-
-        popAlert("maze properties", str);
-    }
+//        String str = "Number of threads for each server = ";
+//        str += Configurations.getInstance().threadPoolSize();
+//        str += "\n";
+//        str += "Generating algorithm = ";
+//        str += prop.getProperty("mazeGenerator");
+//        str += "\n";
+//        str += "Searching algorithm = ";
+//        str +=Configurations.getInstance().mazeSearchingAlgorithm().getName();
+//        Stage window = new Stage();
+//
+//        popAlert("maze properties", str);
+   // }
 
     public  void  changeSettings(){
         try{
