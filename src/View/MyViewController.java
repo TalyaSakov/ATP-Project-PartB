@@ -308,8 +308,6 @@ public class MyViewController implements Initializable, Observer {
             double mousePosY=helperMouseDragged(maximumSize,mazeDisplayer.getWidth(),
                     myViewModel.getMaze().getMaze()[0].length,mouseEvent.getY(),mazeDisplayer.getHeight() / maximumSize,0);
 
-            System.out.println("X " + mousePosX);
-            System.out.println("Y " + mousePosY);
             if ( mousePosX == myViewModel.getColChar() && mousePosY < myViewModel.getRowChar() )
                 myViewModel.moveCharacter(KeyCode.NUMPAD8);
             else if (mousePosY == myViewModel.getRowChar() && mousePosX > myViewModel.getColChar() )

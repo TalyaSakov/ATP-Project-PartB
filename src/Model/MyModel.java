@@ -370,12 +370,12 @@ public class MyModel extends Observable implements IModel {
         return (value.equals("myMazeGenerator") || value.equals("simpleMazeGenerator"));}
 
     public void restartServers(){
+        restartIteration = restartIteration + 2;
         mazeGeneratingServer.stop();
         solveSearchProblemServer.stop();
-
-        this.mazeGeneratingServer = new Server(5400 ,1000, new ServerStrategyGenerateMaze());
-        this.solveSearchProblemServer = new Server(5401 ,1000,new ServerStrategySolveSearchProblem());
-        mazeGeneratingServer.startServer();
-        solveSearchProblemServer.startServer();
+        this.mazeGeneratingServer = new Server(5400 + restartIteration ,1000, new ServerStrategyGenerateMaze());
+        this.solveSearchProblemServer = new Server(5401 +restartIteration,1000,new ServerStrategySolveSearchProblem());
+        mazeGeneratingServer.start();
+        solveSearchProblemServer.start();
     }
 }
