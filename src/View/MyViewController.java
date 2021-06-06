@@ -110,6 +110,10 @@ public class MyViewController implements Initializable, Observer {
         mazeDisplayer.drawSolution(myViewModel.getSolution());
     }
 
+//    public void reachGoal() throws FileNotFoundException {
+//        mazeDisplayer.drawReachToGoal(myViewModel.reachGoal());
+//    }
+
     public void mouseClicked(MouseEvent mouseEvent) {
         mazeDisplayer.requestFocus();
 //        mouseDragged(mouseEvent);
@@ -294,6 +298,7 @@ public class MyViewController implements Initializable, Observer {
                 mazeDisplayer.set_player_position(myViewModel.getRowChar(),myViewModel.getColChar(),0);
                 mazeDisplayer.set_goal_position();
                 mazeDisplayer.drawMaze(maze,0);
+                mazeDisplayer.drawReachToGoal(myViewModel.reachGoal());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -320,6 +325,7 @@ public class MyViewController implements Initializable, Observer {
                     int colChar = mazeDisplayer.getColumn_player();
                     int rowFromViewModel = myViewModel.getRowChar();
                     int colFromViewModel = myViewModel.getColChar();
+                    boolean isreacFromViewModel=myViewModel.reachGoal();
 
                     if(rowFromViewModel == rowChar && colFromViewModel == colChar)//Solve Maze
                     {
@@ -332,6 +338,7 @@ public class MyViewController implements Initializable, Observer {
                         try {
                             int direction = (int) arg;
                             this.mazeDisplayer.set_player_position(rowFromViewModel,colFromViewModel,direction);
+                            this.mazeDisplayer.drawReachToGoal(isreacFromViewModel);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
