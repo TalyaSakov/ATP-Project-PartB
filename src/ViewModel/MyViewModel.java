@@ -21,6 +21,7 @@ public class MyViewModel extends Observable implements Observer {
     private int colChar;
     private int rowGoal;
     private int colGoal;
+    private boolean isReachesToGoal;
 
     public MyViewModel(IModel model) {
         this.model = model;
@@ -35,6 +36,7 @@ public class MyViewModel extends Observable implements Observer {
             colChar = model.getColChar();
             rowGoal = model.getRowGoal();
             colGoal = model.getColGoal();
+            isReachesToGoal= model.getReachGoal();
             maze = model.getMaze();
             maze.setStartPosition(rowChar,colChar);
             maze.setEndPosition(rowGoal,colGoal);
@@ -49,6 +51,7 @@ public class MyViewModel extends Observable implements Observer {
                 if (maze == this.maze) { // Move Character
                     int rowChar = model.getRowChar();
                     int colChar = model.getColChar();
+                    boolean isreach= model.getReachGoal();
                     if (this.colChar == colChar && this.rowChar == rowChar){ // Solve Maze
                         getSolution();
                     }
@@ -56,12 +59,14 @@ public class MyViewModel extends Observable implements Observer {
                      {
                          this.rowChar = rowChar;
                          this.colChar = colChar;
+                         this.isReachesToGoal=isreach;
                      }
                 }
                 else{
                     this.maze = maze;
                     rowChar = model.getRowChar();
                     colChar = model.getColChar();
+                    isReachesToGoal=model.getReachGoal();
                 }
             }
             setChanged();
@@ -111,6 +116,11 @@ public class MyViewModel extends Observable implements Observer {
         model.updateCharacterLocation(direction);
     }
 
+//    public boolean reachGoal() {
+//        this.isReachesToGoal=model.reachGoal();
+//        return this.isReachesToGoal;
+//    }
+
     public int getRowChar() {
         return rowChar;
     }
@@ -145,6 +155,11 @@ public class MyViewModel extends Observable implements Observer {
     public Solution getSolution(){
         return model.getSolution();
     }
+
+    public boolean reachGoal(){
+        return model.getReachGoal();
+    }
+
 
     public void saveGame(File saveFile) throws IOException {
         model.saveMaze(saveFile);

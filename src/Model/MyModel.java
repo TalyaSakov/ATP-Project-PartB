@@ -32,14 +32,14 @@ public class MyModel extends Observable implements IModel {
     private int colChar;
     private int rowGoal;
     private int colGoal;
-    private int restartIteration;
+    private boolean reachGoal;
     //TODO: Add properties.
     public MyModel() throws IOException, InterruptedException {
         maze = null;
         searchableMaze = null;
         rowChar = 0;
         colChar = 0;
-        restartIteration = 0;
+       reachGoal=false;
         this.mazeGeneratingServer = new Server(5400,1000, new ServerStrategyGenerateMaze());
         this.solveSearchProblemServer = new Server(5401,1000,new ServerStrategySolveSearchProblem());
         mazeGeneratingServer.start();
@@ -47,6 +47,7 @@ public class MyModel extends Observable implements IModel {
     }
 
     public void updateCharacterLocation(int direction){
+
         switch (direction){
             case 1: //UP
                 if ((rowChar !=0) && (maze.getMaze()[rowChar-1][colChar] != 1))
@@ -95,9 +96,22 @@ public class MyModel extends Observable implements IModel {
                 }
 
         }
+        System.out.println("step");//TODO:delete
+        if(rowChar==rowGoal&& colChar==colGoal)
+            reachGoal=true;
+        else
+            reachGoal=false;
         setChanged();
         notifyObservers(direction);
      }
+
+    public boolean getReachGoal(){
+        return this.reachGoal;
+    }
+
+
+
+
 
     @Override
     public void assignObserver(Observer observer) {
@@ -368,14 +382,4 @@ public class MyModel extends Observable implements IModel {
 
     private static boolean verifyMazeGenerator(String value) {
         return (value.equals("myMazeGenerator") || value.equals("simpleMazeGenerator"));}
-
-    public void restartServers(){
-        restartIteration = restartIteration + 2;
-        mazeGeneratingServer.stop();
-        solveSearchProblemServer.stop();
-        this.mazeGeneratingServer = new Server(5400 + restartIteration ,1000, new ServerStrategyGenerateMaze());
-        this.solveSearchProblemServer = new Server(5401 +restartIteration,1000,new ServerStrategySolveSearchProblem());
-        mazeGeneratingServer.start();
-        solveSearchProblemServer.start();
-    }
 }

@@ -26,11 +26,13 @@ public class MazeDisplayer extends Canvas {
     private int col_goal;
     private boolean firstRun = true;
     private Solution solution = null;
+    private boolean reachGoal = false;
     private int charDirection = 0;
     StringProperty imageFileNameWall = new SimpleStringProperty();
     StringProperty imageFileNamePlayer = new SimpleStringProperty();
     StringProperty imageGoalIcon = new SimpleStringProperty();
     StringProperty imageSolution= new SimpleStringProperty();
+    StringProperty imageFinish= new SimpleStringProperty();
     StringProperty imageTree= new SimpleStringProperty();
 
 
@@ -178,6 +180,11 @@ public class MazeDisplayer extends Canvas {
     public void setImageFileNamePlayer(String imageFileNamePlayer) { this.imageFileNamePlayer.set(imageFileNamePlayer); }
     public String getImageSolution() { return imageSolution.get(); }
     public void setImageSolution(String imageSolution) { this.imageSolution.set(imageSolution); }
+
+    public String getImageFinish() { return imageFinish.get(); }
+    public void setImageFinish(String imageFinish) { this.imageFinish.set(imageFinish); }
+
+
     public int getRow_player() {return row_player; }
     public int getColumn_player() {
         return column_player;
@@ -185,11 +192,13 @@ public class MazeDisplayer extends Canvas {
 
     public void drawMaze(Maze maze,int direction) throws FileNotFoundException {
         this.maze = maze;
+
         if (firstRun){
             Position startPosition = maze.getStartPosition();
             set_player_position(startPosition.getRowIndex(),startPosition.getColumnIndex(),0);
             firstRun = false;
         }
+        this.reachGoal=false;
         set_goal_position();
         charDirection = direction;
         drawMaze(direction);
@@ -198,6 +207,11 @@ public class MazeDisplayer extends Canvas {
     public void drawSolution(Solution solution) throws FileNotFoundException {
     this.solution = solution;
     drawMaze(charDirection);
+    }
+
+    public void drawReachToGoal(boolean isFinish) throws FileNotFoundException {
+        this.reachGoal = isFinish;
+        drawMaze(charDirection);
     }
 
 //    public void drawSolution(Solution solution) {
@@ -256,10 +270,14 @@ public class MazeDisplayer extends Canvas {
             Image grass = null;
             Image treeImage = null;
             Image solutionPathImage = null;
+            Image reachToGoalImage = null;
             try{
                 treeImage = new Image(new FileInputStream(getImageTree()));
                 grass = new Image(new FileInputStream(getBackGround()));
                 solutionPathImage = new Image(new FileInputStream(getImageSolution()));
+                reachToGoalImage = new Image(new FileInputStream(getImageFinish()));
+
+
             } catch(FileNotFoundException e){
                 System.out.println("File not found");
             }
@@ -286,10 +304,16 @@ public class MazeDisplayer extends Canvas {
                             graphicsContext.drawImage(solutionPathImage, j * cellWidth, i * cellHeight, cellWidth, cellHeight);
                         }
                     }
+                    if (reachGoal !=false){
+                        graphicsContext.drawImage(reachToGoalImage,10,10,450,400);
+                    }
+
                 }
             }
+
             if (solution != null)
                 solution = null;
+
             charDirection = direction;
             drawPlayerAndGoal(cellHeight, cellWidth, graphicsContext,direction);
         }

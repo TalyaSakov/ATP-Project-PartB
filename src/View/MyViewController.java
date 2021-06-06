@@ -16,19 +16,17 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
-import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.apache.log4j.*;
+
 import javax.swing.text.html.ImageView;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,7 +61,6 @@ public class MyViewController implements Initializable, Observer {
     public javafx.scene.Node GridPane_newMaze;
     public BorderPane borderPane;
     private Stage primaryStage;
-    Logger logger = Logger.getLogger(MyViewController.class);
 
     //TODO: ADD MUSIC
     //TODO: ADD when getting to goal.
@@ -90,6 +87,8 @@ public class MyViewController implements Initializable, Observer {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         lbl_player_row.textProperty().bind(update_player_position_row);
         lbl_player_column.textProperty().bind(update_player_position_col);
+
+
     }
 
     public void generateMaze(ActionEvent actionEvent) throws FileNotFoundException {
@@ -99,8 +98,7 @@ public class MyViewController implements Initializable, Observer {
         int cols = Integer.valueOf(textField_mazeColumns.getText());
         myViewModel.generateMaze(rows,cols);
         mazeDisplayer.setFirstRun(true);
-        PropertyConfigurator.configure("src/Resources/log4j.properties");
-        logger.debug("Test!");
+
         mazeDisplayer.widthProperty().bind(MAINPANE.widthProperty());
         mazeDisplayer.heightProperty().bind(MAINPANE.heightProperty());
         mazeDisplayer.drawMaze(myViewModel.getMaze(),0);
@@ -112,36 +110,17 @@ public class MyViewController implements Initializable, Observer {
         mazeDisplayer.drawSolution(myViewModel.getSolution());
     }
 
-
-    public void mouseScroll(ScrollEvent scrollEvent){
-        if (scrollEvent.isControlDown()){
-            double zoomFactor = 1.5;
-            if (scrollEvent.getDeltaY() <= 0){
-                zoomFactor = 1/zoomFactor;
-            }
-
-            Scale newScale = new Scale();
-            newScale.setX(MAINPANE.getScaleX() * zoomFactor);
-            newScale.setY(MAINPANE.getScaleY() * zoomFactor);
-            newScale.setPivotX(MAINPANE.getScaleX());
-            newScale.setPivotY(MAINPANE.getScaleY());
-            MAINPANE.getTransforms().add(newScale);
-
-        }
-    }
-
+//    public void reachGoal() throws FileNotFoundException {
+//        mazeDisplayer.drawReachToGoal(myViewModel.reachGoal());
+//    }
 
     public void mouseClicked(MouseEvent mouseEvent) {
         mazeDisplayer.requestFocus();
 //        mouseDragged(mouseEvent);
-//        EventHandler<MouseEvent> dragPlayer =
-//                t -> mouseDragged(mouseEvent);
-//        mazeDisplayer.setOnMouseDragged(dragPlayer);
+        EventHandler<MouseEvent> dragPlayer =
+                t -> mouseDragged(mouseEvent);
+        mazeDisplayer.setOnMouseDragged(dragPlayer);
     }
-
-//
-
-
 
 
     public void keyPressed(KeyEvent keyEvent) throws FileNotFoundException {
@@ -153,14 +132,6 @@ public class MyViewController implements Initializable, Observer {
         GridPane_newMaze.setVisible(true);
     }
 
-    public void zoomIn(ScrollEvent scrollEvent) {
-        Scale newScale = new Scale();
-        newScale.setX(MAINPANE.getScaleX() + scrollEvent.getDeltaX());
-        newScale.setY(MAINPANE.getScaleY() + scrollEvent.getDeltaY());
-        newScale.setPivotX(MAINPANE.getScaleX());
-        newScale.setPivotY(MAINPANE.getScaleY());
-        MAINPANE.getTransforms().add(newScale);
-    }
 
     public  void  changeSettings(){
         try{
@@ -172,7 +143,6 @@ public class MyViewController implements Initializable, Observer {
             helpStage.setScene(scene);
             helpStage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
             helpStage.show();
-//            myViewModel.restartServers();
         }catch (Exception e){ }
     }
 
@@ -283,23 +253,6 @@ public class MyViewController implements Initializable, Observer {
         window.showAndWait();
     }
 
-    /**Handler for zoom in/out on ctrl + MouseScroller */
-    public void setOnScroll(ScrollEvent scroll) {
-        if (scroll.isControlDown()) {
-            double zoom_fac = 1.05;
-            if (scroll.getDeltaY() < 0) {
-                zoom_fac = 2.0 - zoom_fac;
-            }
-            Scale newScale = new Scale();
-            newScale.setPivotX(scroll.getX());
-            newScale.setPivotY(scroll.getY());
-            newScale.setX(mazeDisplayer.getScaleX() * zoom_fac);
-            newScale.setY(mazeDisplayer.getScaleY() * zoom_fac);
-            mazeDisplayer.getTransforms().add(newScale);
-            scroll.consume();
-        }
-    }
-
     public void mouseDragged(MouseEvent mouseEvent) {
         if(myViewModel.getMaze() != null) {
             int maximumSize = Math.max(myViewModel.getMaze().getMaze()[0].length, myViewModel.getMaze().getMaze().length);
@@ -308,6 +261,8 @@ public class MyViewController implements Initializable, Observer {
             double mousePosY=helperMouseDragged(maximumSize,mazeDisplayer.getWidth(),
                     myViewModel.getMaze().getMaze()[0].length,mouseEvent.getY(),mazeDisplayer.getHeight() / maximumSize,0);
 
+            System.out.println("X " + mousePosX);
+            System.out.println("Y " + mousePosY);
             if ( mousePosX == myViewModel.getColChar() && mousePosY < myViewModel.getRowChar() )
                 myViewModel.moveCharacter(KeyCode.NUMPAD8);
             else if (mousePosY == myViewModel.getRowChar() && mousePosX > myViewModel.getColChar() )
@@ -331,8 +286,6 @@ public class MyViewController implements Initializable, Observer {
     }
 
 
-
-
     @Override
     public void update(Observable o, Object arg) {
 
@@ -345,6 +298,7 @@ public class MyViewController implements Initializable, Observer {
                 mazeDisplayer.set_player_position(myViewModel.getRowChar(),myViewModel.getColChar(),0);
                 mazeDisplayer.set_goal_position();
                 mazeDisplayer.drawMaze(maze,0);
+                mazeDisplayer.drawReachToGoal(myViewModel.reachGoal());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -371,6 +325,7 @@ public class MyViewController implements Initializable, Observer {
                     int colChar = mazeDisplayer.getColumn_player();
                     int rowFromViewModel = myViewModel.getRowChar();
                     int colFromViewModel = myViewModel.getColChar();
+                    boolean isreacFromViewModel=myViewModel.reachGoal();
 
                     if(rowFromViewModel == rowChar && colFromViewModel == colChar)//Solve Maze
                     {
@@ -383,6 +338,7 @@ public class MyViewController implements Initializable, Observer {
                         try {
                             int direction = (int) arg;
                             this.mazeDisplayer.set_player_position(rowFromViewModel,colFromViewModel,direction);
+                            this.mazeDisplayer.drawReachToGoal(isreacFromViewModel);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
