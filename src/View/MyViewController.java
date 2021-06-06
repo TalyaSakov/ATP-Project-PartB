@@ -4,8 +4,9 @@ import Server.Configurations;
 import ViewModel.MyViewModel;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyDoubleProperty;
+
+import javafx.scene.media.Media;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
@@ -24,6 +25,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -39,6 +43,10 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Properties;
 import java.util.ResourceBundle;
+
+
+import javafx.scene.input.KeyEvent;
+
 
 public class MyViewController implements Initializable, Observer {
 
@@ -64,9 +72,11 @@ public class MyViewController implements Initializable, Observer {
     public BorderPane borderPane;
     Logger logger = Logger.getLogger(MyViewController.class);
     private Stage primaryStage;
+    private MediaPlayer mp;//Media player
+
 
     //TODO: ADD MUSIC
-    //TODO: ADD when getting to goal.
+
     //TODO: Change buttons. (Colors and etc.)
     //TODO: Make everything prettier.
 
@@ -94,6 +104,23 @@ public class MyViewController implements Initializable, Observer {
 
     }
 
+    private void setMusic(String path) {
+        //If there is a mediaPlayer, stop it
+        if (mp != null) {
+            mp.stop();
+        }
+        //Create a new media player using the given path
+        Media m=null;
+        try{
+            m = new Media(getClass().getResource(path).toURI().toString());
+        }
+        catch (Exception e){
+            System.out.println(path);
+        }
+        mp = new MediaPlayer(m);
+        //Play the music
+        mp.play();
+    }
     public void generateMaze(ActionEvent actionEvent) throws FileNotFoundException {
         if(generator == null)
             generator = new MazeGenerator();
@@ -101,13 +128,22 @@ public class MyViewController implements Initializable, Observer {
         int cols = Integer.valueOf(textField_mazeColumns.getText());
         myViewModel.generateMaze(rows,cols);
         mazeDisplayer.setFirstRun(true);
-
         mazeDisplayer.widthProperty().bind(MAINPANE.widthProperty());
         mazeDisplayer.heightProperty().bind(MAINPANE.heightProperty());
         mazeDisplayer.drawMaze(myViewModel.getMaze(),0);
-
+        setMusic("/Resources/mp3/backgroundMusic.mp3");
     }
 
+    public void stopMusic(ActionEvent actionEvent) throws FileNotFoundException {
+        if (mp != null) {
+            mp.pause();
+        }
+    }
+    public void playMusic(ActionEvent actionEvent) throws FileNotFoundException {
+        if (mp != null) {
+            mp.play();
+        }
+    }
     public void solveMaze() throws FileNotFoundException {
         myViewModel.solveMaze(mazeDisplayer.getRow_player(),mazeDisplayer.getColumn_player());
         mazeDisplayer.drawSolution(myViewModel.getSolution());
@@ -150,6 +186,7 @@ public class MyViewController implements Initializable, Observer {
     }
 
     public  void  exitGame(){
+
         String strExit = "Are you sure you want to exit?";
         Stage window = new Stage();
 
@@ -249,7 +286,6 @@ public class MyViewController implements Initializable, Observer {
         File loadFile = fileChooser.showOpenDialog(primaryStage);
         if (loadFile != null) {
             myViewModel.loadGame(loadFile);
-           // mazeDisplayer.audioChooser(1);
         } else {
         }
     }
@@ -308,6 +344,7 @@ public class MyViewController implements Initializable, Observer {
     }
 
 
+
     @Override
     public void update(Observable o, Object arg) {
 
@@ -343,6 +380,7 @@ public class MyViewController implements Initializable, Observer {
                 Maze maze = myViewModel.getMaze();
                 if (maze == this.maze)//Not generateMaze
                 {
+
                     int rowChar = mazeDisplayer.getRow_player();
                     int colChar = mazeDisplayer.getColumn_player();
                     int rowFromViewModel = myViewModel.getRowChar();
@@ -361,6 +399,8 @@ public class MyViewController implements Initializable, Observer {
                             int direction = (int) arg;
                             this.mazeDisplayer.set_player_position(rowFromViewModel,colFromViewModel,direction);
                             this.mazeDisplayer.drawReachToGoal(isreacFromViewModel);
+                            if (isreacFromViewModel)
+                                this.setMusic("/Resources/mp3/finish.mp3");
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -368,13 +408,16 @@ public class MyViewController implements Initializable, Observer {
                 }
                 else//GenerateMaze
                 {
+
                     this.maze = maze;
                     try {
+
                         Position startPosition = maze.getStartPosition();
                         set_update_player_position_row(startPosition.getRowIndex() + "");
                         set_update_player_position_col(startPosition.getColumnIndex() + "");
                         mazeDisplayer.drawMaze(maze,0);
-                    } catch (FileNotFoundException e) {
+                    }
+                    catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
                 }

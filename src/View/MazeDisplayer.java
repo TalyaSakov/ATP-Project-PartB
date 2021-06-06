@@ -305,7 +305,7 @@ public class MazeDisplayer extends Canvas {
                         }
                     }
                     if (reachGoal !=false){
-                        graphicsContext.drawImage(reachToGoalImage,10,10,450,400);
+                        graphicsContext.drawImage(reachToGoalImage,40,60,450,400);
                     }
 
                 }
