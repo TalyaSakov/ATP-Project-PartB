@@ -85,6 +85,7 @@ public class PropertiesController implements Initializable {
            prop.setProperty("mazeGenerator",generatorString);
            prop.setProperty("searchingAlgorithm",algorithmString);
            prop.setProperty("threadPoolSize",String.valueOf(poolSize));
+
            FileOutputStream fos = new FileOutputStream("src/Resources/config.properties");
            prop.store(fos,null);
 

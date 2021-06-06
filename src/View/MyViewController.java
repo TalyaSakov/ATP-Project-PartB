@@ -11,6 +11,8 @@ import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.transform.Scale;
+import org.apache.log4j.*;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -60,6 +62,7 @@ public class MyViewController implements Initializable, Observer {
     public VBox VBox;
     public javafx.scene.Node GridPane_newMaze;
     public BorderPane borderPane;
+    Logger logger = Logger.getLogger(MyViewController.class);
     private Stage primaryStage;
 
     //TODO: ADD MUSIC
@@ -117,9 +120,9 @@ public class MyViewController implements Initializable, Observer {
     public void mouseClicked(MouseEvent mouseEvent) {
         mazeDisplayer.requestFocus();
 //        mouseDragged(mouseEvent);
-        EventHandler<MouseEvent> dragPlayer =
-                t -> mouseDragged(mouseEvent);
-        mazeDisplayer.setOnMouseDragged(dragPlayer);
+//        EventHandler<MouseEvent> dragPlayer =
+//                t -> mouseDragged(mouseEvent);
+//        mazeDisplayer.setOnMouseDragged(dragPlayer);
     }
 
 
@@ -201,6 +204,26 @@ public class MyViewController implements Initializable, Observer {
         } catch (Exception e) {
         }
     }
+
+
+    public void mouseScroll(ScrollEvent scrollEvent){
+        if (scrollEvent.isControlDown()){
+            double zoomFactor = 1.5;
+            if (scrollEvent.getDeltaY() <= 0){
+                zoomFactor = 1/zoomFactor;
+            }
+
+            Scale newScale = new Scale();
+            newScale.setX(MAINPANE.getScaleX() * zoomFactor);
+            newScale.setY(MAINPANE.getScaleY() * zoomFactor);
+            newScale.setPivotX(MAINPANE.getScaleX());
+            newScale.setPivotY(MAINPANE.getScaleY());
+            MAINPANE.getTransforms().add(newScale);
+
+        }
+    }
+
+
     public void saveGame() throws IOException {
         FileChooser fileChooser = new FileChooser();
         /*
@@ -260,9 +283,8 @@ public class MyViewController implements Initializable, Observer {
                     myViewModel.getMaze().getMaze().length,mouseEvent.getX(),mazeDisplayer.getWidth() / maximumSize,VBox.getWidth());
             double mousePosY=helperMouseDragged(maximumSize,mazeDisplayer.getWidth(),
                     myViewModel.getMaze().getMaze()[0].length,mouseEvent.getY(),mazeDisplayer.getHeight() / maximumSize,0);
-
-            System.out.println("X " + mousePosX);
-            System.out.println("Y " + mousePosY);
+//            System.out.println("X " + mousePosX);
+//            System.out.println("Y " + mousePosY);
             if ( mousePosX == myViewModel.getColChar() && mousePosY < myViewModel.getRowChar() )
                 myViewModel.moveCharacter(KeyCode.NUMPAD8);
             else if (mousePosY == myViewModel.getRowChar() && mousePosX > myViewModel.getColChar() )
@@ -280,7 +302,7 @@ public class MyViewController implements Initializable, Observer {
 //        System.out.println("Extra " + extra);
 //        System.out.println("Mouse event "+mouseEvent);
 //        System.out.println("Temp " +temp );
-        double mouse = (int) (((mouseEvent) - start -extra) / temp);
+        double mouse = (int) (((mouseEvent) - start ) / temp);
 //        System.out.println("Mouse "+ mouse);
         return mouse;
     }
