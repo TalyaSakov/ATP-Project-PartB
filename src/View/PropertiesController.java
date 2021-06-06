@@ -2,10 +2,8 @@
 package View;
 
 import Server.Configurations;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+
+import java.io.*;
 import java.net.URL;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -49,7 +47,7 @@ public class PropertiesController implements Initializable {
 
         ObservableList<String> generatorsViewrs=FXCollections.observableArrayList( "myMazeGenerator","simpleMazeGenerator");
         mazeGenerator.setItems(generatorsViewrs);
-        String currGenerator ="myMazeGenerator";// Configurations.getInstance().mazeGeneratingAlgorithm().getClass().getName();
+        String currGenerator = Configurations.getInstance().mazeGeneratingAlgorithm().getClass().getName();
         this.mazeGenerator.setValue(currGenerator);
 
         ObservableList<String> algoViewrs=FXCollections.observableArrayList( "BreadthFirstSearch","DepthFirstSearch", "BestFirstSearch");
@@ -57,14 +55,16 @@ public class PropertiesController implements Initializable {
         String currSearchAlgo = Configurations.getInstance().mazeSearchingAlgorithm().getName();
         this.searchingAlgorithm.setValue(currSearchAlgo);
 
+
         int currPoolSize = Configurations.getInstance().threadPoolSize();
         this.poolSize = String.valueOf(currPoolSize);
         this.threadNum=Integer.valueOf(this.poolSize);
 
 
 
+
     }
-        public void UpdateClicked () {
+        public void UpdateClicked () throws IOException {
 
             System.out.println("Properties: saveChanges");
             algorithmString = searchingAlgorithm.getValue();
@@ -73,11 +73,22 @@ public class PropertiesController implements Initializable {
             threadNum =  Integer.valueOf(poolSize);
             hasChanged=true;
 
+            Properties prop = new Properties();
+            InputStream inputStream = Configurations.class.getClassLoader().getResourceAsStream("src/Resources/config.properties");
+            
+            try {
+                prop.load(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            Configurations.getInstance().setMazeGeneratingAlgorithm(generatorString);
-            Configurations.getInstance().setMazeSearchingAlgorithm(algorithmString);
-            Configurations.getInstance().setThreadPoolSize(threadNum);
-            Configurations.start();
+           prop.setProperty("mazeGenerator",generatorString);
+           prop.setProperty("searchingAlgorithm",algorithmString);
+           prop.setProperty("threadPoolSize",String.valueOf(poolSize));
+           FileOutputStream fos = new FileOutputStream("src/Resources/config.properties");
+           prop.store(fos,null);
+
+           
             Stage window = new Stage();
             window.initModality(Modality.APPLICATION_MODAL);
             window.setTitle("success");
