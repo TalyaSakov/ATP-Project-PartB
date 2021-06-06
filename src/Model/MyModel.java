@@ -96,7 +96,7 @@ public class MyModel extends Observable implements IModel {
                 }
 
         }
-        System.out.println("step");//TODO:delete
+
         if(rowChar==rowGoal&& colChar==colGoal)
             reachGoal=true;
         else
@@ -285,6 +285,11 @@ public class MyModel extends Observable implements IModel {
     public void exit() {
         this.mazeGeneratingServer.stop();
         this.solveSearchProblemServer.stop();
+    }
+
+    @Override
+    public void restartServers() {
+
     }
 
     public void loadMaze(File file){
