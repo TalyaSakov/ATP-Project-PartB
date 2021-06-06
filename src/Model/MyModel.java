@@ -32,12 +32,14 @@ public class MyModel extends Observable implements IModel {
     private int colChar;
     private int rowGoal;
     private int colGoal;
+    private int restartIteration;
     //TODO: Add properties.
     public MyModel() throws IOException, InterruptedException {
         maze = null;
         searchableMaze = null;
         rowChar = 0;
         colChar = 0;
+        restartIteration = 0;
         this.mazeGeneratingServer = new Server(5400,1000, new ServerStrategyGenerateMaze());
         this.solveSearchProblemServer = new Server(5401,1000,new ServerStrategySolveSearchProblem());
         mazeGeneratingServer.start();
@@ -366,4 +368,14 @@ public class MyModel extends Observable implements IModel {
 
     private static boolean verifyMazeGenerator(String value) {
         return (value.equals("myMazeGenerator") || value.equals("simpleMazeGenerator"));}
+
+    public void restartServers(){
+        mazeGeneratingServer.stop();
+        solveSearchProblemServer.stop();
+
+        this.mazeGeneratingServer = new Server(5400 ,1000, new ServerStrategyGenerateMaze());
+        this.solveSearchProblemServer = new Server(5401 ,1000,new ServerStrategySolveSearchProblem());
+        mazeGeneratingServer.startServer();
+        solveSearchProblemServer.startServer();
+    }
 }

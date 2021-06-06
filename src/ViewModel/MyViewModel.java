@@ -156,4 +156,7 @@ public class MyViewModel extends Observable implements Observer {
     public void exit() {
         model.exit();
     }
+
+    public void restartServers() {model.restartServers();
+    }
 }
