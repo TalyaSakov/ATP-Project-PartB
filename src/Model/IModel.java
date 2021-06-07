@@ -11,7 +11,6 @@ public interface IModel {
     public Maze getMaze();
     public void updateCharacterLocation(int direction);
     public boolean getReachGoal();
-
     public void assignObserver(Observer observer);
     public int getRowChar();
     public int getColChar();
@@ -19,7 +18,6 @@ public interface IModel {
     public int getColGoal();
     public void solveMaze(int row_player,int col_player);
     public Solution getSolution();
-
     public void saveMaze(File saveFile);
     public void loadMaze(File file);
     public void exit();

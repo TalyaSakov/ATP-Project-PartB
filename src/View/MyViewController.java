@@ -56,22 +56,17 @@ public class MyViewController implements Initializable, Observer {
     @FXML
     public MazeDisplayer mazeDisplayer;
     @FXML
-    public Pane MAINPANE;
+    public Pane MainPane;
     @FXML
+    Logger logger = Logger.getLogger(MyViewController.class);
     public VBox VBox;
     public javafx.scene.Node GridPane_newMaze;
     public BorderPane borderPane;
-    Logger logger = Logger.getLogger(MyViewController.class);
     private Stage primaryStage;
     private MediaPlayer mp;//Media player
     private boolean changedSettings = false;
-
-
-    //TODO: ADD MUSIC
-
-    //TODO: Change buttons. (Colors and etc.)
-    //TODO: Make everything prettier.
-
+    StringProperty update_player_position_row = new SimpleStringProperty();
+    StringProperty update_player_position_col = new SimpleStringProperty();
 
     public void setMyViewModel(MyViewModel myViewModel) {
         this.myViewModel = myViewModel;
@@ -84,10 +79,6 @@ public class MyViewController implements Initializable, Observer {
     public void set_update_player_position_col(String update_player_position_col) {
         this.update_player_position_col.set(update_player_position_col);
     }
-
-    StringProperty update_player_position_row = new SimpleStringProperty();
-    StringProperty update_player_position_col = new SimpleStringProperty();
-    @Override
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         lbl_player_row.textProperty().bind(update_player_position_row);
@@ -112,6 +103,7 @@ public class MyViewController implements Initializable, Observer {
         //Play the music
         mp.play();
     }
+
     public void generateMaze(ActionEvent actionEvent) throws FileNotFoundException {
         if(generator == null)
             generator = new MazeGenerator();
@@ -124,8 +116,8 @@ public class MyViewController implements Initializable, Observer {
         myViewModel.generateMaze(rows,cols);
         mazeDisplayer.setFirstRun(true);
         mazeDisplayer.requestFocus();
-        mazeDisplayer.widthProperty().bind(MAINPANE.widthProperty());
-        mazeDisplayer.heightProperty().bind(MAINPANE.heightProperty());
+        mazeDisplayer.widthProperty().bind(MainPane.widthProperty());
+        mazeDisplayer.heightProperty().bind(MainPane.heightProperty());
         mazeDisplayer.drawMaze(myViewModel.getMaze(),0);
         setMusic("/Resources/mp3/backgroundMusic.mp3");
         logger.info("Maze generated");
@@ -244,11 +236,11 @@ public class MyViewController implements Initializable, Observer {
             }
 
             Scale newScale = new Scale();
-            newScale.setX(MAINPANE.getScaleX() * zoomFactor);
-            newScale.setY(MAINPANE.getScaleY() * zoomFactor);
-            newScale.setPivotX(MAINPANE.getScaleX());
-            newScale.setPivotY(MAINPANE.getScaleY());
-            MAINPANE.getTransforms().add(newScale);
+            newScale.setX(MainPane.getScaleX() * zoomFactor);
+            newScale.setY(MainPane.getScaleY() * zoomFactor);
+            newScale.setPivotX(MainPane.getScaleX());
+            newScale.setPivotY(MainPane.getScaleY());
+            MainPane.getTransforms().add(newScale);
 
         }
     }
@@ -351,9 +343,7 @@ public class MyViewController implements Initializable, Observer {
                 e.printStackTrace();
             }
         }
-        else if(o instanceof MyViewModel)
-        {
-            if(maze == null)//generateMaze
+        if (arg == "generateMaze")
             {
                 this.maze = myViewModel.getMaze();
                 Position startPosition = maze.getStartPosition();
@@ -365,7 +355,7 @@ public class MyViewController implements Initializable, Observer {
                     e.printStackTrace();
                 }
             }
-            else {
+         else{
                 Maze maze = myViewModel.getMaze();
                 if (maze == this.maze)//Not generateMaze
                 {
@@ -414,4 +404,3 @@ public class MyViewController implements Initializable, Observer {
         }
     }
 
-}

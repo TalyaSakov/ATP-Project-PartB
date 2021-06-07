@@ -23,7 +23,6 @@ public class MyModel extends Observable implements IModel {
     private Maze maze;
     private SearchableMaze searchableMaze;
     private Solution solution;
-//    private ExecutorService threadPool = Executors.newCachedThreadPool();
     Server mazeGeneratingServer;
     Server solveSearchProblemServer;
     private int rowChar;
@@ -31,7 +30,7 @@ public class MyModel extends Observable implements IModel {
     private int rowGoal;
     private int colGoal;
     private boolean reachGoal;
-    //TODO: Add properties.
+
     public MyModel() throws IOException, InterruptedException {
         maze = null;
         searchableMaze = null;
@@ -107,28 +106,11 @@ public class MyModel extends Observable implements IModel {
         return this.reachGoal;
     }
 
-
-
-
-
     @Override
     public void assignObserver(Observer observer) {
         this.addObserver(observer);
     }
 
-//    public void generateMaze(int rows, int cols){
-//        Maze maze = new MyMazeGenerator().generate(rows,cols);
-//        this.maze = maze;
-//        Position startPosition = maze.getStartPosition();
-//        rowChar = startPosition.getRowIndex();
-//        colChar = startPosition.getColumnIndex();
-//        Position goalPosition = maze.getGoalPosition();
-//        rowGoal = goalPosition.getRowIndex();
-//        colGoal = goalPosition.getColumnIndex();
-//        this.searchableMaze = new SearchableMaze(maze);
-//        setChanged();
-//        notifyObservers();
-//    }
     @Override
     public Maze getMaze() {
         return maze;
@@ -157,15 +139,6 @@ public class MyModel extends Observable implements IModel {
     public void setColGoal(int colGoal) {
         this.colGoal = colGoal;
     }
-
-
-//    public void solveMaze(int row_player, int col_player) {
-//        BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch();
-//        maze.setStartPosition(row_player,col_player);
-//        solution = breadthFirstSearch.solve(searchableMaze);
-//        setChanged();
-//        notifyObservers();
-//    }
 
     @Override
     public Solution getSolution() {
@@ -227,7 +200,7 @@ public class MyModel extends Observable implements IModel {
             });
             client.communicateWithServer();
             setChanged();
-            notifyObservers();
+            notifyObservers("generateMaze");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -279,13 +252,11 @@ public class MyModel extends Observable implements IModel {
 
     }
 
-    @Override
     public void exit() {
         this.mazeGeneratingServer.stop();
         this.solveSearchProblemServer.stop();
     }
 
-    @Override
     public void restartServers() {
 
     }
@@ -344,7 +315,6 @@ public class MyModel extends Observable implements IModel {
 
 }
 
-
     public static void changeProperty( String key, String value) throws IOException {
 
         Properties properties = new Properties();
@@ -381,7 +351,6 @@ public class MyModel extends Observable implements IModel {
     private static boolean verifySearchingAlgorithm(String value) {
         return (value.equals("DepthFirstSearch") || value.equals("BestFirstSearch") || value.equals(
                 "BreadthFirstSearch"));}
-
 
     private static boolean verifyMazeGenerator(String value) {
         return (value.equals("myMazeGenerator") || value.equals("simpleMazeGenerator"));}

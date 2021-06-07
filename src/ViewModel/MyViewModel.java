@@ -119,11 +119,6 @@ public class MyViewModel extends Observable implements Observer {
         model.updateCharacterLocation(direction);
     }
 
-//    public boolean reachGoal() {
-//        this.isReachesToGoal=model.reachGoal();
-//        return this.isReachesToGoal;
-//    }
-
     public int getRowChar() {
         return rowChar;
     }
@@ -139,6 +134,7 @@ public class MyViewModel extends Observable implements Observer {
     public void setColChar(int colChar) {
         this.colChar = colChar;
     }
+
     public int getRowGoal() {
         return rowGoal;
     }
@@ -163,10 +159,10 @@ public class MyViewModel extends Observable implements Observer {
         return model.getReachGoal();
     }
 
-
     public void saveGame(File saveFile) throws IOException {
         model.saveMaze(saveFile);
     }
+
     public void loadGame(File file) throws IOException, ClassNotFoundException {
         model.loadMaze(file);
     }
