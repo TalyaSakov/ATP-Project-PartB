@@ -2,12 +2,6 @@
 package View;
 
 import Server.Configurations;
-
-import java.io.*;
-import java.net.URL;
-import java.util.Properties;
-import java.util.ResourceBundle;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
@@ -20,6 +14,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class PropertiesController implements Initializable {
     public Stage stage;
@@ -61,8 +62,6 @@ public class PropertiesController implements Initializable {
         this.threadNum=Integer.valueOf(this.poolSize);
 
 
-
-
     }
         public void UpdateClicked () throws IOException {
 
@@ -85,6 +84,8 @@ public class PropertiesController implements Initializable {
            prop.setProperty("mazeGenerator",generatorString);
            prop.setProperty("searchingAlgorithm",algorithmString);
            prop.setProperty("threadPoolSize",String.valueOf(poolSize));
+
+
 
            FileOutputStream fos = new FileOutputStream("src/Resources/config.properties");
            prop.store(fos,null);

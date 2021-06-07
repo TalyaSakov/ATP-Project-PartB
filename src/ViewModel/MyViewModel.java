@@ -15,7 +15,6 @@ public class MyViewModel extends Observable implements Observer {
 
     private IModel model;
     private Maze maze;
-    private Solution solution;
 
     private int rowChar;
     private int colChar;
@@ -27,6 +26,10 @@ public class MyViewModel extends Observable implements Observer {
         this.model = model;
         this.model.assignObserver(this);
         this.maze = null;
+    }
+
+    public void refreshStrategies() {
+        model.refreshStrategies();
     }
 
     @Override

@@ -64,6 +64,7 @@ public class MyViewController implements Initializable, Observer {
     Logger logger = Logger.getLogger(MyViewController.class);
     private Stage primaryStage;
     private MediaPlayer mp;//Media player
+    private boolean changedSettings = false;
 
 
     //TODO: ADD MUSIC
@@ -114,6 +115,10 @@ public class MyViewController implements Initializable, Observer {
     public void generateMaze(ActionEvent actionEvent) throws FileNotFoundException {
         if(generator == null)
             generator = new MazeGenerator();
+        if (changedSettings){
+            myViewModel.refreshStrategies();
+            changedSettings = false;
+        }
         int rows = Integer.valueOf(textField_mazeRows.getText());
         int cols = Integer.valueOf(textField_mazeColumns.getText());
         myViewModel.generateMaze(rows,cols);
@@ -123,35 +128,32 @@ public class MyViewController implements Initializable, Observer {
         mazeDisplayer.heightProperty().bind(MAINPANE.heightProperty());
         mazeDisplayer.drawMaze(myViewModel.getMaze(),0);
         setMusic("/Resources/mp3/backgroundMusic.mp3");
+        logger.info("Maze generated");
     }
 
     public void stopMusic(ActionEvent actionEvent) throws FileNotFoundException {
         if (mp != null) {
             mp.pause();
+            logger.info("Music stopped");
         }
     }
+
     public void playMusic(ActionEvent actionEvent) throws FileNotFoundException {
         if (mp != null) {
             mp.play();
+            logger.info("Music playing");
         }
     }
+
     public void solveMaze() throws FileNotFoundException {
         myViewModel.solveMaze(mazeDisplayer.getRow_player(),mazeDisplayer.getColumn_player());
         mazeDisplayer.drawSolution(myViewModel.getSolution());
+        logger.info("Solve maze is triggered");
     }
-
-//    public void reachGoal() throws FileNotFoundException {
-//        mazeDisplayer.drawReachToGoal(myViewModel.reachGoal());
-//    }
 
     public void mouseClicked(MouseEvent mouseEvent) {
         mazeDisplayer.requestFocus();
-//        mouseDragged(mouseEvent);
-//        EventHandler<MouseEvent> dragPlayer =
-//                t -> mouseDragged(mouseEvent);
-//        mazeDisplayer.setOnMouseDragged(dragPlayer);
     }
-
 
     public void keyPressed(KeyEvent keyEvent) throws FileNotFoundException {
         myViewModel.moveCharacter(keyEvent);
@@ -162,7 +164,6 @@ public class MyViewController implements Initializable, Observer {
         GridPane_newMaze.setVisible(true);
     }
 
-
     public  void  changeSettings(){
         try{
             Stage helpStage = new Stage();
@@ -172,12 +173,14 @@ public class MyViewController implements Initializable, Observer {
             Scene scene = new Scene(root, 315, 400);//possible to specify w and h
             helpStage.setScene(scene);
             helpStage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            changedSettings = true;
             helpStage.show();
+            logger.info("Change settings is triggered.");
         }catch (Exception e){ }
     }
 
     public  void  exitGame(){
-
+        logger.info("exit game is triggered.");
         String strExit = "Are you sure you want to exit?";
         Stage window = new Stage();
 
@@ -233,7 +236,6 @@ public class MyViewController implements Initializable, Observer {
         }
     }
 
-
     public void mouseScroll(ScrollEvent scrollEvent){
         if (scrollEvent.isControlDown()){
             double zoomFactor = 1.5;
@@ -251,13 +253,9 @@ public class MyViewController implements Initializable, Observer {
         }
     }
 
-
     public void saveGame() throws IOException {
+        logger.info("Save game is triggered.");
         FileChooser fileChooser = new FileChooser();
-        /*
-        System.getProperty("user.home") :
-        on Windows:  home directory of the current logged in user. c:\Users\${current_user_name}
-        * on Linux: "/home/user/"  */
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Maze Files", "*.maze")
@@ -269,7 +267,6 @@ public class MyViewController implements Initializable, Observer {
         }
     }
 
-    /**File->Load Menu Item Handler */
     public void loadGame() throws IOException, ClassNotFoundException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -280,6 +277,7 @@ public class MyViewController implements Initializable, Observer {
         } else {
         }
     }
+
     public void popAlert (String title, String message ){
 
         Stage window = new Stage();
@@ -306,23 +304,26 @@ public class MyViewController implements Initializable, Observer {
     public void mouseDragged(MouseEvent mouseEvent) {
         if(myViewModel.getMaze() != null) {
             int maximumSize = Math.max(myViewModel.getMaze().getMaze()[0].length, myViewModel.getMaze().getMaze().length);
-            double mousePosX=helperMouseDragged(maximumSize,mazeDisplayer.getHeight(),
+            double mousePosX=mouseDraggedCheck(maximumSize,mazeDisplayer.getHeight(),
                     myViewModel.getMaze().getMaze().length,mouseEvent.getX(),mazeDisplayer.getWidth() / maximumSize,VBox.getWidth());
-            double mousePosY=helperMouseDragged(maximumSize,mazeDisplayer.getWidth(),
+            double mousePosY=mouseDraggedCheck(maximumSize,mazeDisplayer.getWidth(),
                     myViewModel.getMaze().getMaze()[0].length,mouseEvent.getY(),mazeDisplayer.getHeight() / maximumSize,0);
-//            System.out.println("X " + mousePosX);
-//            System.out.println("Y " + mousePosY);
-            if ( mousePosX == myViewModel.getColChar() && mousePosY < myViewModel.getRowChar() )
-                myViewModel.moveCharacter(KeyCode.NUMPAD8);
-            else if (mousePosY == myViewModel.getRowChar() && mousePosX > myViewModel.getColChar() )
-                myViewModel.moveCharacter(KeyCode.NUMPAD6);
-            else if ( mousePosY == myViewModel.getRowChar() && mousePosX < myViewModel.getColChar() )
-                myViewModel.moveCharacter(KeyCode.NUMPAD4);
-            else if (mousePosX == myViewModel.getColChar() && mousePosY > myViewModel.getRowChar()  )
-                myViewModel.moveCharacter(KeyCode.NUMPAD2);
+            Move(mousePosX, mousePosY);
         }
     }
-    private  double helperMouseDragged(int maxsize, double canvasSize, int mazeSize,double mouseEvent,double temp,double extra){
+
+    private void Move(double mousePosX, double mousePosY) {
+        if ( mousePosX == myViewModel.getColChar() && mousePosY < myViewModel.getRowChar() )
+            myViewModel.moveCharacter(KeyCode.NUMPAD8);
+        else if (mousePosY == myViewModel.getRowChar() && mousePosX > myViewModel.getColChar() )
+            myViewModel.moveCharacter(KeyCode.NUMPAD6);
+        else if ( mousePosY == myViewModel.getRowChar() && mousePosX < myViewModel.getColChar() )
+            myViewModel.moveCharacter(KeyCode.NUMPAD4);
+        else if (mousePosX == myViewModel.getColChar() && mousePosY > myViewModel.getRowChar()  )
+            myViewModel.moveCharacter(KeyCode.NUMPAD2);
+    }
+
+    private  double mouseDraggedCheck(int maxsize, double canvasSize, int mazeSize,double mouseEvent,double temp,double extra){
         double cellSize=canvasSize/maxsize;
         double start = (canvasSize / 2 - (cellSize * mazeSize / 2)) / cellSize ;
 //        System.out.println("Start" + start);
@@ -334,9 +335,6 @@ public class MyViewController implements Initializable, Observer {
         return mouse;
     }
 
-
-
-    @Override
     public void update(Observable o, Object arg) {
 
         if (arg == "loaded"){

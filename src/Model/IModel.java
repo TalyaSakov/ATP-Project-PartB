@@ -24,4 +24,5 @@ public interface IModel {
     public void loadMaze(File file);
     public void exit();
     public void restartServers();
+    public void refreshStrategies();
 }

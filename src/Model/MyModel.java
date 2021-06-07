@@ -3,15 +3,13 @@ package Model;
 import Client.Client;
 import Client.IClientStrategy;
 import IO.MyDecompressorInputStream;
-import IO.SimpleDecompressorInputStream;
 import Server.Server;
+import Server.ServerStrategyGenerateMaze;
+import Server.ServerStrategySolveSearchProblem;
 import algorithms.mazeGenerators.Maze;
-import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.mazeGenerators.Position;
-import algorithms.search.*;
-import Server.*;
-import javafx.geometry.Pos;
-
+import algorithms.search.SearchableMaze;
+import algorithms.search.Solution;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -387,4 +385,9 @@ public class MyModel extends Observable implements IModel {
 
     private static boolean verifyMazeGenerator(String value) {
         return (value.equals("myMazeGenerator") || value.equals("simpleMazeGenerator"));}
+
+    public void refreshStrategies(){
+        mazeGeneratingServer.setStrategy(new ServerStrategyGenerateMaze());
+        solveSearchProblemServer.setStrategy(new ServerStrategySolveSearchProblem());
+    }
 }

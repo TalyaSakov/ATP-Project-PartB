@@ -3,14 +3,12 @@ package View;
 import Model.IModel;
 import Model.MyModel;
 import ViewModel.MyViewModel;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.Objects;
+import org.apache.log4j.BasicConfigurator;
 
 public class Main extends Application {
 
@@ -21,10 +19,10 @@ public class Main extends Application {
         primaryStage.setTitle("Hello World");
         Scene scene = new Scene(root,700,560);
         primaryStage.setScene(scene);
-//        primaryStage.minWidthProperty().bind(scene.heightProperty());
+        primaryStage.minWidthProperty().bind(scene.heightProperty());
 //        primaryStage.minHeightProperty().bind(scene.widthProperty());
         primaryStage.show();
-
+        BasicConfigurator.configure();
         IModel model = new MyModel();
         MyViewModel viewModel = new MyViewModel(model);
         MyViewController view = fxmlLoader.getController();
