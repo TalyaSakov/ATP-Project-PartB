@@ -25,7 +25,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="ATP-Project-PartC" level="project" />
-    <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
@@ -42,6 +41,22 @@
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <NATIVE>
+          <root url="file://$MODULE_DIR$/lib" />
+        </NATIVE>
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/lib" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
   </component>

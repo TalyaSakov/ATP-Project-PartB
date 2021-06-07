@@ -1,51 +1,42 @@
 package View;
 
-import Server.Configurations;
 import ViewModel.MyViewModel;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
-
-import javafx.scene.media.Media;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.transform.Scale;
-import org.apache.log4j.*;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.*;
-import javafx.scene.layout.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
+import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
+import org.apache.log4j.Logger;
 
-import javax.swing.text.html.ImageView;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Properties;
 import java.util.ResourceBundle;
-
-
-import javafx.scene.input.KeyEvent;
 
 
 public class MyViewController implements Initializable, Observer {
@@ -101,7 +92,6 @@ public class MyViewController implements Initializable, Observer {
         lbl_player_row.textProperty().bind(update_player_position_row);
         lbl_player_column.textProperty().bind(update_player_position_col);
 
-
     }
 
     private void setMusic(String path) {
@@ -128,6 +118,7 @@ public class MyViewController implements Initializable, Observer {
         int cols = Integer.valueOf(textField_mazeColumns.getText());
         myViewModel.generateMaze(rows,cols);
         mazeDisplayer.setFirstRun(true);
+        mazeDisplayer.requestFocus();
         mazeDisplayer.widthProperty().bind(MAINPANE.widthProperty());
         mazeDisplayer.heightProperty().bind(MAINPANE.heightProperty());
         mazeDisplayer.drawMaze(myViewModel.getMaze(),0);
