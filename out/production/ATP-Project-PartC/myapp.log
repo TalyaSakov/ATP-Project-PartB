@@ -1,8 +1,3 @@
-2021-06-07 22:22:40 INFO  MyViewController:123 - Maze generated
-2021-06-07 22:23:24 INFO  MyViewController:129 - Music stopped
-2021-06-07 22:23:29 INFO  MyViewController:123 - Maze generated
-2021-06-07 22:23:33 INFO  MyViewController:143 - Solve maze is triggered
-2021-06-07 22:23:43 INFO  MyViewController:143 - Solve maze is triggered
-2021-06-07 22:24:04 INFO  MyViewController:170 - Change settings is triggered.
-2021-06-07 22:24:12 INFO  MyViewController:123 - Maze generated
-2021-06-07 22:24:19 INFO  MyViewController:129 - Music stopped
+2021-06-08 12:40:19 INFO  MyViewController:123 - Maze generated
+2021-06-08 12:40:25 INFO  MyViewController:143 - Solve maze is triggered
+2021-06-08 12:40:26 INFO  MyViewController:143 - Solve maze is triggered

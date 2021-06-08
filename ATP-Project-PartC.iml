@@ -24,7 +24,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="ATP-Project-PartC" level="project" />
+    <orderEntry type="library" exported="" name="ATP-Project-PartC" level="project" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
