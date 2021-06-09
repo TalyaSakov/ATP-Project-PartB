@@ -206,7 +206,7 @@ public class MyViewController implements Initializable, Observer {
             helpStage.setTitle("Help");
             FXMLLoader fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getResource("Help.fxml").openStream());
-            Scene scene = new Scene(root, 515, 650);//possible to specify w and h
+            Scene scene = new Scene(root, 515, 530);//possible to specify w and h
             helpStage.setScene(scene);
             helpStage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
             helpStage.show();
