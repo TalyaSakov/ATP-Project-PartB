@@ -11,7 +11,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.text.Element;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -35,7 +34,7 @@ public class AboutController {
         aboutYoni.setTitle("Jonathan Pelah");
         aboutYoni.setMinHeight(250);
         aboutYoni.setMinWidth(250);
-        String yoniDec= "This is yoni";
+        String yoniDec= "Jonathan Pelah, 25 years old. \n" + "Originally from the town of Omer";
 
         FileInputStream input = new FileInputStream("src/Resources/Images/yoni.jpg");
         Image yoni = new Image(input);
@@ -51,7 +50,7 @@ public class AboutController {
         aboutTalya.setTitle("Talya Sakov");
         aboutTalya.setMinHeight(250);
         aboutTalya.setMinWidth(250);
-        String talyaDec= "Talya Sakov, 25 years old.\n"+"Leaves in Zichron Yaacov";
+        String talyaDec= "Talya Sakov, 25 years old.\n"+"Originally from the city of Zichron Yaacov";
 
         FileInputStream input1 = new FileInputStream("src/Resources/Images/talya.jpg");
         Image talya = new Image(input1);

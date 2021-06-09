@@ -264,6 +264,7 @@ public class MyViewController implements Initializable, Observer {
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Maze Files", "*.maze"));
         File loadFile = fileChooser.showOpenDialog(primaryStage);
+        logger.info("Loading game");
         if (loadFile != null) {
             myViewModel.loadGame(loadFile);
         } else {
@@ -339,6 +340,7 @@ public class MyViewController implements Initializable, Observer {
                 mazeDisplayer.set_goal_position();
                 mazeDisplayer.drawMaze(maze,0);
                 mazeDisplayer.drawReachToGoal(myViewModel.reachGoal());
+                logger.info("Game is loaded");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -351,6 +353,7 @@ public class MyViewController implements Initializable, Observer {
                     set_update_player_position_row(startPosition.getRowIndex() + "");
                     set_update_player_position_col(startPosition.getColumnIndex() + "");
                     mazeDisplayer.drawMaze(maze,0);
+                    logger.info("Drawing maze");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -387,7 +390,6 @@ public class MyViewController implements Initializable, Observer {
                 }
                 else//GenerateMaze
                 {
-
                     this.maze = maze;
                     try {
 

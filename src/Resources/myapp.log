@@ -1,2 +1,3 @@
-2021-06-08 12:40:42 INFO  MyViewController:123 - Maze generated
-2021-06-08 12:40:43 INFO  MyViewController:143 - Solve maze is triggered
+2021-06-09 16:12:56 INFO  MyViewController:356 - Drawing maze
+2021-06-09 16:12:57 INFO  MyViewController:123 - Maze generated
+2021-06-09 16:12:58 INFO  MyViewController:170 - Change settings is triggered.

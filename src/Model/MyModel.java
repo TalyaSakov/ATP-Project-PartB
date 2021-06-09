@@ -36,7 +36,7 @@ public class MyModel extends Observable implements IModel {
         searchableMaze = null;
         rowChar = 0;
         colChar = 0;
-       reachGoal=false;
+        reachGoal=false;
         this.mazeGeneratingServer = new Server(5400,1000, new ServerStrategyGenerateMaze());
         this.solveSearchProblemServer = new Server(5401,1000,new ServerStrategySolveSearchProblem());
         mazeGeneratingServer.start();

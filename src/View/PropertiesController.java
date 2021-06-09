@@ -98,7 +98,7 @@ public class PropertiesController implements Initializable {
             window.setMinHeight(350);
 
             Label label = new Label();
-            label.setText("Changing settings completed successfully.\n"+"Please restart the program in order to take effect. \n" + "You can see the current state of settings \n"+ "in the \"show properties\" button. ");
+            label.setText("Changing settings completed successfully.\n" + "You can see the current state of settings \n"+ "in the \"show properties\" button. ");
             Button closeButton = new Button("Close this window");
             closeButton.setOnAction(e -> window.close());
 
