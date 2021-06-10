@@ -153,7 +153,29 @@ public class MyViewController implements Initializable, Observer {
     }
 
     public  void  newGame(){
-        GridPane_newMaze.setVisible(true);
+        mp.stop();
+        if(generator == null)
+            generator = new MazeGenerator();
+        if (changedSettings){
+            myViewModel.refreshStrategies();
+            changedSettings = false;
+        }
+        try {
+            int rows = Integer.valueOf(textField_mazeRows.getText());
+            int columns = Integer.valueOf(textField_mazeColumns.getText());
+            //  GridPane_newMaze.setDisable(false);
+            myViewModel.generateMaze(rows, columns);
+            mazeDisplayer.setFirstRun(true);
+           // update_player_position_row = myViewModel.getMaze().getStartPosition().getRowIndex();
+            mazeDisplayer.requestFocus();
+            mazeDisplayer.widthProperty().bind(MainPane.widthProperty());
+            mazeDisplayer.heightProperty().bind(MainPane.heightProperty());
+            mazeDisplayer.drawMaze(myViewModel.getMaze(),0);
+            setMusic("/Resources/mp3/backgroundMusic.mp3");
+            logger.info("New Maze");
+        } catch (NumberFormatException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public  void  changeSettings(){
@@ -197,6 +219,7 @@ public class MyViewController implements Initializable, Observer {
         Scene scene = new Scene(layout);
         window.setScene(scene);
         window.showAndWait();
+        logger.info("Exit from game");
 
     }
 

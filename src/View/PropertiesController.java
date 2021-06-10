@@ -68,7 +68,13 @@ public class PropertiesController implements Initializable {
             System.out.println("Properties: saveChanges");
             algorithmString = searchingAlgorithm.getValue();
             generatorString = mazeGenerator.getValue();
-            this.poolSize=this.numOfThreads.getText();
+
+
+            if(this.numOfThreads.getText()=="")
+                this.poolSize=String.valueOf(Configurations.getInstance().threadPoolSize());
+            else
+                this.poolSize=this.numOfThreads.getText();
+
             threadNum =  Integer.valueOf(poolSize);
             hasChanged=true;
 
@@ -131,7 +137,10 @@ public class PropertiesController implements Initializable {
              str = "Number of threads for each server = ";
             algorithmString = searchingAlgorithm.getValue();
             generatorString = mazeGenerator.getValue();
-            this.poolSize = this.numOfThreads.getText();
+            if(this.numOfThreads.getText()=="")
+                this.poolSize=String.valueOf(Configurations.getInstance().threadPoolSize());
+            else
+                this.poolSize=this.numOfThreads.getText();
             threadNum = Integer.valueOf(poolSize);
             str += threadNum;
             str += "\n";
