@@ -63,7 +63,30 @@ public class PropertiesController implements Initializable {
 
 
     }
-        public void UpdateClicked () throws IOException {
+    public void popAlert (String title, String message ){
+
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle(title);
+        window.setMinWidth(300);
+        window.setMinHeight(300);
+
+        Label label = new Label();
+        label.setText(message);
+        Button closeButton = new Button("Close this window");
+        closeButton.setOnAction(e -> window.close());
+
+        VBox layout = new VBox(20);
+        layout.getChildren().addAll(label, closeButton);
+        layout.setAlignment(Pos.CENTER);
+
+        //Display window and wait for it to be closed before returning
+        Scene scene = new Scene(layout);
+        window.setScene(scene);
+        window.showAndWait();
+    }
+
+    public void UpdateClicked () throws IOException {
 
             System.out.println("Properties: saveChanges");
             algorithmString = searchingAlgorithm.getValue();
@@ -72,6 +95,10 @@ public class PropertiesController implements Initializable {
 
             if(this.numOfThreads.getText()=="")
                 this.poolSize=String.valueOf(Configurations.getInstance().threadPoolSize());
+            else if(!numOfThreads.getText().matches("\\d*")){
+                numOfThreads.setText(String.valueOf(Configurations.getInstance().threadPoolSize()));
+                popAlert("Error","Numbers Only!");
+            }
             else
                 this.poolSize=this.numOfThreads.getText();
 
@@ -139,7 +166,10 @@ public class PropertiesController implements Initializable {
             generatorString = mazeGenerator.getValue();
             if(this.numOfThreads.getText()=="")
                 this.poolSize=String.valueOf(Configurations.getInstance().threadPoolSize());
-            else
+            else if (!numOfThreads.getText().matches("\\d*")){
+            numOfThreads.setText(String.valueOf(Configurations.getInstance().threadPoolSize()));
+            popAlert("Error","Numbers Only!");
+        }
                 this.poolSize=this.numOfThreads.getText();
             threadNum = Integer.valueOf(poolSize);
             str += threadNum;

@@ -111,7 +111,15 @@ public class MyViewController implements Initializable, Observer {
             myViewModel.refreshStrategies();
             changedSettings = false;
         }
+        if(!textField_mazeRows.getText().matches("\\d*")){
+            textField_mazeRows.setText("10");
+            popAlert("Error","Numbers Only!");
+        }
         int rows = Integer.valueOf(textField_mazeRows.getText());
+        if(!textField_mazeColumns.getText().matches("\\d*")){
+            textField_mazeColumns.setText("10");
+            popAlert("Error","Numbers Only!");
+        }
         int cols = Integer.valueOf(textField_mazeColumns.getText());
         myViewModel.generateMaze(rows,cols);
         mazeDisplayer.setFirstRun(true);

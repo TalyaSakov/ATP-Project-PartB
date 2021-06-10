@@ -16,10 +16,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MyView.fxml"));
         Parent root = fxmlLoader.load();
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Homework Maze");
         Scene scene = new Scene(root,700,560);
         primaryStage.setScene(scene);
-        primaryStage.minWidthProperty().bind(scene.heightProperty());
+ //       primaryStage.minWidthProperty().bind(scene.heightProperty());
 //        primaryStage.minHeightProperty().bind(scene.widthProperty());
         primaryStage.show();
         BasicConfigurator.configure();
